@@ -11,34 +11,35 @@ namespace mxnet {
 namespace op {
 template <>
 Operator* CreateOp<cpu>(InstanceNormParam param, int dtype) {
-  return new InstanceNormOp<cpu>(param);
+    return new InstanceNormOp<cpu>(param);
 }
 
 // DO_BIND_DISPATCH comes from operator_common.h
 Operator* InstanceNormProp::CreateOperatorEx(Context ctx,
                                              std::vector<TShape>* in_shape,
                                              std::vector<int>* in_type) const {
-  std::vector<TShape> out_shape, aux_shape;
-  std::vector<int> out_type, aux_type;
-  CHECK(InferType(in_type, &out_type, &aux_type));
-  CHECK(InferShape(in_shape, &out_shape, &aux_shape));
-  DO_BIND_DISPATCH(CreateOp, param_, (*in_type)[0]);
+    std::vector<TShape> out_shape, aux_shape;
+    std::vector<int> out_type, aux_type;
+    CHECK(InferType(in_type, &out_type, &aux_type));
+    CHECK(InferShape(in_shape, &out_shape, &aux_shape));
+    DO_BIND_DISPATCH(CreateOp, param_, (*in_type)[0]);
 }
 
 DMLC_REGISTER_PARAMETER(InstanceNormParam);
 
 MXNET_REGISTER_OP_PROPERTY(InstanceNorm, InstanceNormProp)
-.add_argument("data", "NDArray-or-Symbol",
-              "An n-dimensional input array (n > 2) of the form [batch, "
-              "channel, spatial_dim1, spatial_dim2, ...].")
-.add_argument("gamma", "NDArray-or-Symbol",
-              "A vector of length \'channel\', which multiplies the "
-              "normalized input.")
-.add_argument("beta", "NDArray-or-Symbol",
-              "A vector of length \'channel\', which is added to the "
-              "product of the normalized input and the weight.")
-.add_arguments(InstanceNormParam::__FIELDS__())
-.describe(R"code(Applies instance normalization to the n-dimensional input array.
+    .add_argument("data", "NDArray-or-Symbol",
+                  "An n-dimensional input array (n > 2) of the form [batch, "
+                  "channel, spatial_dim1, spatial_dim2, ...].")
+    .add_argument("gamma", "NDArray-or-Symbol",
+                  "A vector of length \'channel\', which multiplies the "
+                  "normalized input.")
+    .add_argument("beta", "NDArray-or-Symbol",
+                  "A vector of length \'channel\', which is added to the "
+                  "product of the normalized input and the weight.")
+    .add_arguments(InstanceNormParam::__FIELDS__())
+    .describe(
+        R"code(Applies instance normalization to the n-dimensional input array.
 
 This operator takes an n-dimensional input array where (n>2) and normalizes
 the input using the following formula:

@@ -8,12 +8,13 @@
 namespace mxnet {
 namespace op {
 
-template<>
+template <>
 Operator *CreateOp<cpu>(CountSketchParam param, int dtype) {
     LOG(FATAL) << "CountSketch is only available for GPU.";
     return NULL;
 }
-Operator *CountSketchProp::CreateOperatorEx(Context ctx, std::vector<TShape> *in_shape,
+Operator *CountSketchProp::CreateOperatorEx(Context ctx,
+                                            std::vector<TShape> *in_shape,
                                             std::vector<int> *in_type) const {
     std::vector<TShape> out_shape, aux_shape;
     std::vector<int> out_type, aux_type;
@@ -24,7 +25,8 @@ Operator *CountSketchProp::CreateOperatorEx(Context ctx, std::vector<TShape> *in
 
 DMLC_REGISTER_PARAMETER(CountSketchParam);
 MXNET_REGISTER_OP_PROPERTY(_contrib_count_sketch, CountSketchProp)
-.describe(R"code(Apply CountSketch to input: map a d-dimension data to k-dimension data"
+    .describe(
+        R"code(Apply CountSketch to input: map a d-dimension data to k-dimension data"
 
 .. note:: `count_sketch` is only available on GPU.
 
@@ -45,10 +47,11 @@ Example::
                                                                     [3.2, 0, 0, -5.7, 6.6]]
 
 )code" ADD_FILELINE)
-.add_argument("data", "NDArray-or-Symbol", "Input data to the CountSketchOp.")
-.add_argument("h", "NDArray-or-Symbol", "The index vector")
-.add_argument("s", "NDArray-or-Symbol", "The sign vector")
-.add_arguments(CountSketchParam::__FIELDS__());
+    .add_argument("data", "NDArray-or-Symbol",
+                  "Input data to the CountSketchOp.")
+    .add_argument("h", "NDArray-or-Symbol", "The index vector")
+    .add_argument("s", "NDArray-or-Symbol", "The sign vector")
+    .add_arguments(CountSketchParam::__FIELDS__());
 
 }  // namespace op
 }  // namespace mxnet

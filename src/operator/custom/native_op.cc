@@ -8,21 +8,24 @@
 
 namespace mxnet {
 namespace op {
-template<>
-Operator *CreateOp<cpu>(NativeOpParam param) {
-  return new NativeOp<cpu>(param);
+template <>
+Operator* CreateOp<cpu>(NativeOpParam param) {
+    return new NativeOp<cpu>(param);
 }
 
 Operator* NativeOpProp::CreateOperator(Context ctx) const {
-  DO_BIND_DISPATCH(CreateOp, param_);
+    DO_BIND_DISPATCH(CreateOp, param_);
 }
 
 DMLC_REGISTER_PARAMETER(NativeOpParam);
 
 MXNET_REGISTER_OP_PROPERTY(_Native, NativeOpProp)
-.describe("Stub for implementing an operator implemented in native frontend language.")
-.add_argument("data", "NDArray-or-Symbol[]", "Input data for the custom operator.")
-.add_arguments(NativeOpParam::__FIELDS__());
+    .describe(
+        "Stub for implementing an operator implemented in native frontend "
+        "language.")
+    .add_argument("data", "NDArray-or-Symbol[]",
+                  "Input data for the custom operator.")
+    .add_arguments(NativeOpParam::__FIELDS__());
 
 }  // namespace op
 }  // namespace mxnet

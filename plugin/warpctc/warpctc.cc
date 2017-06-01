@@ -5,25 +5,25 @@
  * \author Liang Xiang
 */
 
-#include "./warpctc-inl.h"
 #include "../../src/operator/mshadow_op.h"
+#include "./warpctc-inl.h"
 
 namespace mxnet {
 namespace op {
-template<>
+template <>
 Operator *CreateOp<cpu>(WarpCTCParam param) {
-  return new WarpCTCOp<cpu>(param);
+    return new WarpCTCOp<cpu>(param);
 }
 
 Operator *WarpCTCProp::CreateOperator(Context ctx) const {
-  DO_BIND_DISPATCH(CreateOp, param_);
+    DO_BIND_DISPATCH(CreateOp, param_);
 }
 
 DMLC_REGISTER_PARAMETER(WarpCTCParam);
 
 MXNET_REGISTER_OP_PROPERTY(WarpCTC, WarpCTCProp)
-.describe("warp ctc.")
-.add_arguments(WarpCTCParam::__FIELDS__());
+    .describe("warp ctc.")
+    .add_arguments(WarpCTCParam::__FIELDS__());
 
 }  // namespace op
 }  // namespace mxnet

@@ -15,29 +15,29 @@ namespace storage {
  * \brief Storage manager interface.
  */
 class StorageManager {
- public:
-  /*!
-   * \brief Allocation.
-   * \param size Size to allocate.
-   * \return Pointer to the storage.
-   */
-  virtual void* Alloc(size_t size) = 0;
-  /*!
-   * \brief Deallocation.
-   * \param ptr Pointer to deallocate.
-   * \param size Size of the storage.
-   */
-  virtual void Free(void* ptr, size_t size) = 0;
-  /*!
-   * \brief Direct de-allocation.
-   * \param ptr Pointer to deallocate.
-   * \param size Size of the storage.
-   */
-  virtual void DirectFree(void* ptr, size_t size) = 0;
-  /*!
-   * \brief Destructor.
-   */
-  virtual ~StorageManager() = default;
+   public:
+    /*!
+     * \brief Allocation.
+     * \param size Size to allocate.
+     * \return Pointer to the storage.
+     */
+    virtual void* Alloc(size_t size) = 0;
+    /*!
+     * \brief Deallocation.
+     * \param ptr Pointer to deallocate.
+     * \param size Size of the storage.
+     */
+    virtual void Free(void* ptr, size_t size) = 0;
+    /*!
+     * \brief Direct de-allocation.
+     * \param ptr Pointer to deallocate.
+     * \param size Size of the storage.
+     */
+    virtual void DirectFree(void* ptr, size_t size) = 0;
+    /*!
+     * \brief Destructor.
+     */
+    virtual ~StorageManager() = default;
 };  // namespace StorageManager
 
 }  // namespace storage

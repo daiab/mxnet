@@ -8,8 +8,8 @@
 #include "./convolution-inl.h"
 #if MXNET_USE_MKL2017 == 1
 #include <mkl_memory.h>
-#include "./mkl/mkl_memory-inl.h"
 #include "./mkl/mkl_convolution-inl.h"
+#include "./mkl/mkl_memory-inl.h"
 #endif  // MXNET_USE_MKL2017
 #if MXNET_USE_NNPACK == 1
 #include "./nnpack/nnpack_convolution-inl.h"
@@ -19,67 +19,65 @@ namespace mxnet {
 namespace op {
 DMLC_REGISTER_PARAMETER(ConvolutionParam);
 
-template<>
-Operator* CreateOp<cpu>(ConvolutionParam param, int dtype,
+template <>
+Operator *CreateOp<cpu>(ConvolutionParam param, int dtype,
                         std::vector<TShape> *in_shape,
-                        std::vector<TShape> *out_shape,
-                        Context ctx) {
-  Operator *op = NULL;
-  // If 1D convolution, use MXNet implementation
-  if (param.kernel.ndim() == 1) {
-    MSHADOW_REAL_TYPE_SWITCH(dtype, DType, {
-      op = new ConvolutionOp<cpu, DType>(param);
-    })
-    return op;
-  }
-#if MXNET_USE_MKL2017 == 1
-  if ((param.dilate[0] == 1 && param.dilate[1] == 1)
-      && param.kernel.ndim() == 2) {
-    switch (dtype) {
-    case mshadow::kFloat32:
-      return new MKLConvolutionOp<cpu, float>(param);
-    case mshadow::kFloat64:
-      return new MKLConvolutionOp<cpu, double>(param);
-    default:
-      break;
+                        std::vector<TShape> *out_shape, Context ctx) {
+    Operator *op = NULL;
+    // If 1D convolution, use MXNet implementation
+    if (param.kernel.ndim() == 1) {
+        MSHADOW_REAL_TYPE_SWITCH(dtype, DType,
+                                 { op = new ConvolutionOp<cpu, DType>(param); })
+        return op;
     }
-  }
-  LOG(INFO) << MKLConvolutionOp<cpu, float>::getName() << " Skip MKL optimization";
+#if MXNET_USE_MKL2017 == 1
+    if ((param.dilate[0] == 1 && param.dilate[1] == 1) &&
+        param.kernel.ndim() == 2) {
+        switch (dtype) {
+            case mshadow::kFloat32:
+                return new MKLConvolutionOp<cpu, float>(param);
+            case mshadow::kFloat64:
+                return new MKLConvolutionOp<cpu, double>(param);
+            default:
+                break;
+        }
+    }
+    LOG(INFO) << MKLConvolutionOp<cpu, float>::getName()
+              << " Skip MKL optimization";
 #endif
 #if MXNET_USE_NNPACK == 1
-  const size_t batch_size = (*in_shape)[0][0];
-  if ((param.dilate[0] == 1 && param.dilate[1] == 1)
-      && param.kernel.ndim() == 2 && (!param.no_bias)
-      && param.num_group == 1 && (batch_size == 1 ||
-      ((batch_size > 1) && (param.stride[0] == 1) &&
-      (param.stride[1] == 1)))) {
-    switch (dtype) {
-    case mshadow::kFloat32:
-      return new NNPACKConvolutionOp<cpu, float>(param);
-    default:
-      break;
+    const size_t batch_size = (*in_shape)[0][0];
+    if ((param.dilate[0] == 1 && param.dilate[1] == 1) &&
+        param.kernel.ndim() == 2 && (!param.no_bias) && param.num_group == 1 &&
+        (batch_size == 1 || ((batch_size > 1) && (param.stride[0] == 1) &&
+                             (param.stride[1] == 1)))) {
+        switch (dtype) {
+            case mshadow::kFloat32:
+                return new NNPACKConvolutionOp<cpu, float>(param);
+            default:
+                break;
+        }
     }
-  }
 #endif
-  MSHADOW_REAL_TYPE_SWITCH(dtype, DType, {
-    op = new ConvolutionOp<cpu, DType>(param);
-  })
-  return op;
+    MSHADOW_REAL_TYPE_SWITCH(dtype, DType,
+                             { op = new ConvolutionOp<cpu, DType>(param); })
+    return op;
 }
 
 // DO_BIND_DISPATCH comes from operator_common.h
 Operator *ConvolutionProp::CreateOperatorEx(Context ctx,
                                             std::vector<TShape> *in_shape,
                                             std::vector<int> *in_type) const {
-  std::vector<TShape> out_shape, aux_shape;
-  std::vector<int> out_type, aux_type;
-  CHECK(InferType(in_type, &out_type, &aux_type));
-  CHECK(InferShape(in_shape, &out_shape, &aux_shape));
-  DO_BIND_DISPATCH(CreateOp, param_, (*in_type)[0], in_shape, &out_shape, ctx);
+    std::vector<TShape> out_shape, aux_shape;
+    std::vector<int> out_type, aux_type;
+    CHECK(InferType(in_type, &out_type, &aux_type));
+    CHECK(InferShape(in_shape, &out_shape, &aux_shape));
+    DO_BIND_DISPATCH(CreateOp, param_, (*in_type)[0], in_shape, &out_shape,
+                     ctx);
 }
 
 MXNET_REGISTER_OP_PROPERTY(Convolution, ConvolutionProp)
-.describe(R"code(Compute *N*-D convolution on *(N+2)*-D input.
+    .describe(R"code(Compute *N*-D convolution on *(N+2)*-D input.
 
 In the 2-D convolution, given input data with shape *(batch_size,
 channel, height, width)*, the output is computed by
@@ -152,10 +150,11 @@ There are other options to tune the performance.
   the performance.
 
 )code" ADD_FILELINE)
-.add_argument("data", "NDArray-or-Symbol", "Input data to the ConvolutionOp.")
-.add_argument("weight", "NDArray-or-Symbol", "Weight matrix.")
-.add_argument("bias", "NDArray-or-Symbol", "Bias parameter.")
-.add_arguments(ConvolutionParam::__FIELDS__());
+    .add_argument("data", "NDArray-or-Symbol",
+                  "Input data to the ConvolutionOp.")
+    .add_argument("weight", "NDArray-or-Symbol", "Weight matrix.")
+    .add_argument("bias", "NDArray-or-Symbol", "Bias parameter.")
+    .add_arguments(ConvolutionParam::__FIELDS__());
 
 }  // namespace op
 }  // namespace mxnet

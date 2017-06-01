@@ -15,25 +15,25 @@ namespace mxnet {
 namespace op {
 
 class NNPACKInitialize {
- public:
-  pthreadpool_t threadpool;
+   public:
+    pthreadpool_t threadpool;
 
- public:
-  NNPACKInitialize() {
-    nnp_status status = nnp_initialize();
-    if (nnp_status_success != status) {
-      LOG(FATAL) << "nnp_initialize failed status=" << status;
+   public:
+    NNPACKInitialize() {
+        nnp_status status = nnp_initialize();
+        if (nnp_status_success != status) {
+            LOG(FATAL) << "nnp_initialize failed status=" << status;
+        }
+        int num_threads = dmlc::GetEnv("MXNET_CPU_NNPACK_NTHREADS", 4);
+        this->threadpool = pthreadpool_create(num_threads);
     }
-    int num_threads = dmlc::GetEnv("MXNET_CPU_NNPACK_NTHREADS", 4);
-    this->threadpool = pthreadpool_create(num_threads);
-  }
-  virtual ~NNPACKInitialize() {
-    nnp_status status = nnp_deinitialize();
-    if (nnp_status_success != status) {
-      LOG(FATAL) << "nnp_deinitialize failed status=" << status;
+    virtual ~NNPACKInitialize() {
+        nnp_status status = nnp_deinitialize();
+        if (nnp_status_success != status) {
+            LOG(FATAL) << "nnp_deinitialize failed status=" << status;
+        }
+        pthreadpool_destroy(threadpool);
     }
-    pthreadpool_destroy(threadpool);
-  }
 };
 
 // nnpackinitialize will be used in all other nnpack op

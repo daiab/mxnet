@@ -17,70 +17,73 @@
 namespace mxnet {
 namespace op {
 
-template<>
+template <>
 Operator *CreateOp<cpu>(PoolingParam param, int dtype) {
-  Operator *op = NULL;
-  // TODO(lingyan): kFull use exclude padding algorithm now
+    Operator *op = NULL;
+// TODO(lingyan): kFull use exclude padding algorithm now
 #if MXNET_USE_MKL2017 == 1
-    if (param.kernel.ndim() == 2
-      && (param.pooling_convention == pool_enum::kValid)
-      && ((param.pool_type == pool_enum::kMaxPooling)
-      || (param.pool_type == pool_enum::kAvgPooling))) {
-      switch (dtype) {
-      case mshadow::kFloat32:
-        return new MKLPoolingOp<cpu, float>(param);
-      case mshadow::kFloat64:
-        return new MKLPoolingOp<cpu, double>(param);
-      default:
-        break;
-      }
+    if (param.kernel.ndim() == 2 &&
+        (param.pooling_convention == pool_enum::kValid) &&
+        ((param.pool_type == pool_enum::kMaxPooling) ||
+         (param.pool_type == pool_enum::kAvgPooling))) {
+        switch (dtype) {
+            case mshadow::kFloat32:
+                return new MKLPoolingOp<cpu, float>(param);
+            case mshadow::kFloat64:
+                return new MKLPoolingOp<cpu, double>(param);
+            default:
+                break;
+        }
     }
-    LOG(INFO) << MKLPoolingOp<cpu, float>::getName() << " Skip MKL optimization";
+    LOG(INFO) << MKLPoolingOp<cpu, float>::getName()
+              << " Skip MKL optimization";
 #endif
 #if MXNET_USE_NNPACK == 1
-  // NNPACK only support max-pooling with kernel = 2, stride = 2, pooling_convention
-  // = kFull(note that the default value is kValid in MXNet)
-  if ((param.pool_type == pool_enum::kMaxPooling)
-    && (param.pooling_convention == pool_enum::kFull)
-    && (param.kernel.ndim() == 2) && (param.stride.ndim() == 2)
-    && (param.kernel[0] == 2) && (param.kernel[1] == 2)
-    && (param.stride[0] == 2) && (param.stride[1] == 2)) {
-    switch (dtype) {
-    case mshadow::kFloat32:
-      return new NNPACKPoolingOp<cpu, float>(param);
-    default:
-      break;
+    // NNPACK only support max-pooling with kernel = 2, stride = 2,
+    // pooling_convention
+    // = kFull(note that the default value is kValid in MXNet)
+    if ((param.pool_type == pool_enum::kMaxPooling) &&
+        (param.pooling_convention == pool_enum::kFull) &&
+        (param.kernel.ndim() == 2) && (param.stride.ndim() == 2) &&
+        (param.kernel[0] == 2) && (param.kernel[1] == 2) &&
+        (param.stride[0] == 2) && (param.stride[1] == 2)) {
+        switch (dtype) {
+            case mshadow::kFloat32:
+                return new NNPACKPoolingOp<cpu, float>(param);
+            default:
+                break;
+        }
     }
-  }
 #endif
-  MSHADOW_REAL_TYPE_SWITCH(dtype, DType, {
-    if (pool_enum::kMaxPooling == param.pool_type
-        || pool_enum::kAvgPooling == param.pool_type
-        || pool_enum::kSumPooling == param.pool_type) {
-      op = new PoolingOp<cpu, DType>(param);
-    } else {
-      LOG(FATAL) << "unknown pooling type";
-      return NULL;
-    }
-  });
+    MSHADOW_REAL_TYPE_SWITCH(dtype, DType, {
+        if (pool_enum::kMaxPooling == param.pool_type ||
+            pool_enum::kAvgPooling == param.pool_type ||
+            pool_enum::kSumPooling == param.pool_type) {
+            op = new PoolingOp<cpu, DType>(param);
+        } else {
+            LOG(FATAL) << "unknown pooling type";
+            return NULL;
+        }
+    });
 
-  return op;
+    return op;
 }
 
 // DO_BIND_DISPATCH comes from operator_common.h
-Operator* PoolingProp::CreateOperatorEx(Context ctx, std::vector<TShape> *in_shape,
-                                     std::vector<int> *in_type) const {
-  std::vector<TShape> out_shape, aux_shape;
-  std::vector<int> out_type, aux_type;
-  CHECK(InferType(in_type, &out_type, &aux_type));
-  CHECK(InferShape(in_shape, &out_shape, &aux_shape));
-  DO_BIND_DISPATCH(CreateOp, param_, (*in_type)[0]);
+Operator *PoolingProp::CreateOperatorEx(Context ctx,
+                                        std::vector<TShape> *in_shape,
+                                        std::vector<int> *in_type) const {
+    std::vector<TShape> out_shape, aux_shape;
+    std::vector<int> out_type, aux_type;
+    CHECK(InferType(in_type, &out_type, &aux_type));
+    CHECK(InferShape(in_shape, &out_shape, &aux_shape));
+    DO_BIND_DISPATCH(CreateOp, param_, (*in_type)[0]);
 }
 
 DMLC_REGISTER_PARAMETER(PoolingParam);
 
 MXNET_REGISTER_OP_PROPERTY(Pooling, PoolingProp)
-.describe(R"code(Performs pooling on the input.
+    .describe(R"code(Performs pooling on the input.
 
 The shapes for 1-D pooling are
 
@@ -119,8 +122,9 @@ For 3-D pooling, an additional *depth* dimension is added before
 height, width)*.
 
 )code" ADD_FILELINE)
-.add_argument("data", "NDArray-or-Symbol", "Input data to the pooling operator.")
-.add_arguments(PoolingParam::__FIELDS__());
+    .add_argument("data", "NDArray-or-Symbol",
+                  "Input data to the pooling operator.")
+    .add_arguments(PoolingParam::__FIELDS__());
 
 }  // namespace op
 }  // namespace mxnet

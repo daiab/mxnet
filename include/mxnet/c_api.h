@@ -20,9 +20,9 @@ extern "C" {
 
 #include <stdint.h>
 
-#include <stdint.h>
-#include <stddef.h>
 #include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
 
 /*! \brief MXNET_DLL prefix for windows */
 #ifdef _WIN32
@@ -67,84 +67,83 @@ typedef void *RecordIOHandle;
 /*! \brief handle to MXRtc*/
 typedef void *RtcHandle;
 
-typedef void (*ExecutorMonitorCallback)(const char*,
-                                        NDArrayHandle,
-                                        void *);
+typedef void (*ExecutorMonitorCallback)(const char *, NDArrayHandle, void *);
 
 struct NativeOpInfo {
-  void (*forward)(int, float**, int*, unsigned**, int*, void*);
-  void (*backward)(int, float**, int*, unsigned**, int*, void*);
-  void (*infer_shape)(int, int*, unsigned**, void*);
-  void (*list_outputs)(char***, void*);
-  void (*list_arguments)(char***, void*);
-  // all functions also pass a payload void* pointer
-  void* p_forward;
-  void* p_backward;
-  void* p_infer_shape;
-  void* p_list_outputs;
-  void* p_list_arguments;
+    void (*forward)(int, float **, int *, unsigned **, int *, void *);
+    void (*backward)(int, float **, int *, unsigned **, int *, void *);
+    void (*infer_shape)(int, int *, unsigned **, void *);
+    void (*list_outputs)(char ***, void *);
+    void (*list_arguments)(char ***, void *);
+    // all functions also pass a payload void* pointer
+    void *p_forward;
+    void *p_backward;
+    void *p_infer_shape;
+    void *p_list_outputs;
+    void *p_list_arguments;
 };
 
 struct NDArrayOpInfo {
-  bool (*forward)(int, void**, int*, void*);
-  bool (*backward)(int, void**, int*, void*);
-  bool (*infer_shape)(int, int*, unsigned**, void*);
-  bool (*list_outputs)(char***, void*);
-  bool (*list_arguments)(char***, void*);
-  bool (*declare_backward_dependency)(const int*, const int*, const int*,
-                                      int*, int**, void*);
-  // all functions also pass a payload void* pointer
-  void* p_forward;
-  void* p_backward;
-  void* p_infer_shape;
-  void* p_list_outputs;
-  void* p_list_arguments;
-  void* p_declare_backward_dependency;
+    bool (*forward)(int, void **, int *, void *);
+    bool (*backward)(int, void **, int *, void *);
+    bool (*infer_shape)(int, int *, unsigned **, void *);
+    bool (*list_outputs)(char ***, void *);
+    bool (*list_arguments)(char ***, void *);
+    bool (*declare_backward_dependency)(const int *, const int *, const int *,
+                                        int *, int **, void *);
+    // all functions also pass a payload void* pointer
+    void *p_forward;
+    void *p_backward;
+    void *p_infer_shape;
+    void *p_list_outputs;
+    void *p_list_arguments;
+    void *p_declare_backward_dependency;
 };
 
 typedef int (*MXGenericCallback)(void);
 
 struct MXCallbackList {
-  int num_callbacks;
-  int (**callbacks)(void);
-  void **contexts;
+    int num_callbacks;
+    int (**callbacks)(void);
+    void **contexts;
 };
 
-enum CustomOpCallbacks {
-  kCustomOpDelete,
-  kCustomOpForward,
-  kCustomOpBackward
-};
+enum CustomOpCallbacks { kCustomOpDelete, kCustomOpForward, kCustomOpBackward };
 
 enum CustomOpPropCallbacks {
-  kCustomOpPropDelete,
-  kCustomOpPropListArguments,
-  kCustomOpPropListOutputs,
-  kCustomOpPropListAuxiliaryStates,
-  kCustomOpPropInferShape,
-  kCustomOpPropDeclareBackwardDependency,
-  kCustomOpPropCreateOperator,
-  kCustomOpPropInferType
+    kCustomOpPropDelete,
+    kCustomOpPropListArguments,
+    kCustomOpPropListOutputs,
+    kCustomOpPropListAuxiliaryStates,
+    kCustomOpPropInferShape,
+    kCustomOpPropDeclareBackwardDependency,
+    kCustomOpPropCreateOperator,
+    kCustomOpPropInferType
 };
 
-typedef int (*CustomOpFBFunc)(int /*size*/, void** /*ptrs*/, int* /*tags*/,
-                              const int* /*reqs*/, const int /*is_train*/,
-                              void* /*state*/);
-typedef int (*CustomOpDelFunc)(void* /*state*/);
-typedef int (*CustomOpListFunc)(char*** /*args*/, void* /*state*/);
-typedef int (*CustomOpInferShapeFunc)(int /*num_input*/, int* /*ndims*/,
-                                      unsigned** /*shapes*/, void* /*state*/);
-typedef int (*CustomOpInferTypeFunc)(int /*num_input*/, int* /*types*/, void* /*state*/);
-typedef int (*CustomOpBwdDepFunc)(const int* /*out_grad*/, const int* /*in_data*/,
-                                  const int* /*out_data*/, int* /*num_deps*/,
-                                  int** /*rdeps*/, void* /*state*/);
-typedef int (*CustomOpCreateFunc)(const char* /*ctx*/, int /*num_inputs*/,
-                                  unsigned** /*shapes*/, int* /*ndims*/,
-                                  int* /*dtypes*/, struct MXCallbackList* /*ret*/,
-                                  void* /*state*/);
-typedef int (*CustomOpPropCreator)(const char* /*op_type*/, const int /*num_kwargs*/,
-                                     const char** /*keys*/, const char** /*values*/,
-                                     struct MXCallbackList* /*ret*/);
+typedef int (*CustomOpFBFunc)(int /*size*/, void ** /*ptrs*/, int * /*tags*/,
+                              const int * /*reqs*/, const int /*is_train*/,
+                              void * /*state*/);
+typedef int (*CustomOpDelFunc)(void * /*state*/);
+typedef int (*CustomOpListFunc)(char *** /*args*/, void * /*state*/);
+typedef int (*CustomOpInferShapeFunc)(int /*num_input*/, int * /*ndims*/,
+                                      unsigned ** /*shapes*/, void * /*state*/);
+typedef int (*CustomOpInferTypeFunc)(int /*num_input*/, int * /*types*/,
+                                     void * /*state*/);
+typedef int (*CustomOpBwdDepFunc)(const int * /*out_grad*/,
+                                  const int * /*in_data*/,
+                                  const int * /*out_data*/, int * /*num_deps*/,
+                                  int ** /*rdeps*/, void * /*state*/);
+typedef int (*CustomOpCreateFunc)(const char * /*ctx*/, int /*num_inputs*/,
+                                  unsigned ** /*shapes*/, int * /*ndims*/,
+                                  int * /*dtypes*/,
+                                  struct MXCallbackList * /*ret*/,
+                                  void * /*state*/);
+typedef int (*CustomOpPropCreator)(const char * /*op_type*/,
+                                   const int /*num_kwargs*/,
+                                   const char ** /*keys*/,
+                                   const char ** /*values*/,
+                                   struct MXCallbackList * /*ret*/);
 
 /*!
  * \brief return str message of the last error
@@ -182,7 +181,7 @@ MXNET_DLL int MXNotifyShutdown();
  * \param filename where to save trace file
  * \return 0 when success, -1 when failure happens.
  */
-MXNET_DLL int MXSetProfilerConfig(int mode, const char* filename);
+MXNET_DLL int MXSetProfilerConfig(int mode, const char *filename);
 /*!
  * \brief Set up state of profiler
  * \param state indicate the working state of profiler,
@@ -220,12 +219,8 @@ MXNET_DLL int MXNDArrayCreateNone(NDArrayHandle *out);
  * \param out the returning handle
  * \return 0 when success, -1 when failure happens
  */
-MXNET_DLL int MXNDArrayCreate(const mx_uint *shape,
-                              mx_uint ndim,
-                              int dev_type,
-                              int dev_id,
-                              int delay_alloc,
-                              NDArrayHandle *out);
+MXNET_DLL int MXNDArrayCreate(const mx_uint *shape, mx_uint ndim, int dev_type,
+                              int dev_id, int delay_alloc, NDArrayHandle *out);
 
 /*!
  * \brief create a NDArray with specified shape and data type
@@ -239,13 +234,9 @@ MXNET_DLL int MXNDArrayCreate(const mx_uint *shape,
  * \param out the returning handle
  * \return 0 when success, -1 when failure happens
  */
-MXNET_DLL int MXNDArrayCreateEx(const mx_uint *shape,
-                              mx_uint ndim,
-                              int dev_type,
-                              int dev_id,
-                              int delay_alloc,
-                              int dtype,
-                              NDArrayHandle *out);
+MXNET_DLL int MXNDArrayCreateEx(const mx_uint *shape, mx_uint ndim,
+                                int dev_type, int dev_id, int delay_alloc,
+                                int dtype, NDArrayHandle *out);
 /*!
  * \brief create a NDArray handle that is loaded from raw bytes.
  * \param buf the head of the raw bytes
@@ -253,8 +244,7 @@ MXNET_DLL int MXNDArrayCreateEx(const mx_uint *shape,
  * \param out the returning handle
  * \return 0 when success, -1 when failure happens
  */
-MXNET_DLL int MXNDArrayLoadFromRawBytes(const void *buf,
-                                        size_t size,
+MXNET_DLL int MXNDArrayLoadFromRawBytes(const void *buf, size_t size,
                                         NDArrayHandle *out);
 /*!
  * \brief save the NDArray into raw bytes.
@@ -263,8 +253,7 @@ MXNET_DLL int MXNDArrayLoadFromRawBytes(const void *buf,
  * \param out_buf the head of returning memory bytes.
  * \return 0 when success, -1 when failure happens
  */
-MXNET_DLL int MXNDArraySaveRawBytes(NDArrayHandle handle,
-                                    size_t *out_size,
+MXNET_DLL int MXNDArraySaveRawBytes(NDArrayHandle handle, size_t *out_size,
                                     const char **out_buf);
 /*!
  * \brief Save list of narray into the file.
@@ -274,10 +263,8 @@ MXNET_DLL int MXNDArraySaveRawBytes(NDArrayHandle handle,
  * \param keys the name of the NDArray, optional, can be NULL
  * \return 0 when success, -1 when failure happens
  */
-MXNET_DLL int MXNDArraySave(const char* fname,
-                            mx_uint num_args,
-                            NDArrayHandle* args,
-                            const char** keys);
+MXNET_DLL int MXNDArraySave(const char *fname, mx_uint num_args,
+                            NDArrayHandle *args, const char **keys);
 /*!
  * \brief Load list of narray from the file.
  * \param fname name of the file.
@@ -287,11 +274,9 @@ MXNET_DLL int MXNDArraySave(const char* fname,
  * \param out_names the names of returning NDArrays, can be NULL
  * \return 0 when success, -1 when failure happens
  */
-MXNET_DLL int MXNDArrayLoad(const char* fname,
-                            mx_uint *out_size,
-                            NDArrayHandle** out_arr,
-                            mx_uint *out_name_size,
-                            const char*** out_names);
+MXNET_DLL int MXNDArrayLoad(const char *fname, mx_uint *out_size,
+                            NDArrayHandle **out_arr, mx_uint *out_name_size,
+                            const char ***out_names);
 /*!
  * \brief Perform a synchronize copy from a continugous CPU memory region.
  *
@@ -303,8 +288,7 @@ MXNET_DLL int MXNDArrayLoad(const char* fname,
  * \param data the data source to copy from.
  * \param size the memory size we want to copy from.
  */
-MXNET_DLL int MXNDArraySyncCopyFromCPU(NDArrayHandle handle,
-                                       const void *data,
+MXNET_DLL int MXNDArraySyncCopyFromCPU(NDArrayHandle handle, const void *data,
                                        size_t size);
 /*!
  * \brief Perform a synchronize copyto a continugous CPU memory region.
@@ -317,8 +301,7 @@ MXNET_DLL int MXNDArraySyncCopyFromCPU(NDArrayHandle handle,
  * \param data the data source to copy into.
  * \param size the memory size we want to copy into.
  */
-MXNET_DLL int MXNDArraySyncCopyToCPU(NDArrayHandle handle,
-                                     void *data,
+MXNET_DLL int MXNDArraySyncCopyToCPU(NDArrayHandle handle, void *data,
                                      size_t size);
 /*!
  * \brief Wait until all the pending writes with respect NDArray are finished.
@@ -328,7 +311,8 @@ MXNET_DLL int MXNDArraySyncCopyToCPU(NDArrayHandle handle,
  */
 MXNET_DLL int MXNDArrayWaitToRead(NDArrayHandle handle);
 /*!
- * \brief Wait until all the pending read/write with respect NDArray are finished.
+ * \brief Wait until all the pending read/write with respect NDArray are
+ * finished.
  *  Always call this before write data into NDArray synchronizely.
  * \param handle the NDArray handle
  * \return 0 when success, -1 when failure happens
@@ -354,10 +338,8 @@ MXNET_DLL int MXNDArrayFree(NDArrayHandle handle);
  * \param out The NDArrayHandle of sliced NDArray
  * \return 0 when success, -1 when failure happens
  */
-MXNET_DLL int MXNDArraySlice(NDArrayHandle handle,
-                             mx_uint slice_begin,
-                             mx_uint slice_end,
-                             NDArrayHandle *out);
+MXNET_DLL int MXNDArraySlice(NDArrayHandle handle, mx_uint slice_begin,
+                             mx_uint slice_end, NDArrayHandle *out);
 /*!
  * \brief Index the NDArray along axis 0.
  * \param handle the handle to the NDArray
@@ -365,8 +347,7 @@ MXNET_DLL int MXNDArraySlice(NDArrayHandle handle,
  * \param out The NDArrayHandle of output NDArray
  * \return 0 when success, -1 when failure happens
  */
-MXNET_DLL int MXNDArrayAt(NDArrayHandle handle,
-                          mx_uint idx,
+MXNET_DLL int MXNDArrayAt(NDArrayHandle handle, mx_uint idx,
                           NDArrayHandle *out);
 /*!
  * \brief Reshape the NDArray.
@@ -376,9 +357,7 @@ MXNET_DLL int MXNDArrayAt(NDArrayHandle handle,
  * \param out the NDArrayHandle of reshaped NDArray
  * \return 0 when success, -1 when failure happens
  */
-MXNET_DLL int MXNDArrayReshape(NDArrayHandle handle,
-                               int ndim,
-                               int *dims,
+MXNET_DLL int MXNDArrayReshape(NDArrayHandle handle, int ndim, int *dims,
                                NDArrayHandle *out);
 /*!
  * \brief get the shape of the array
@@ -387,8 +366,7 @@ MXNET_DLL int MXNDArrayReshape(NDArrayHandle handle,
  * \param out_pdata pointer holder to get data pointer of the shape
  * \return 0 when success, -1 when failure happens
  */
-MXNET_DLL int MXNDArrayGetShape(NDArrayHandle handle,
-                                mx_uint *out_dim,
+MXNET_DLL int MXNDArrayGetShape(NDArrayHandle handle, mx_uint *out_dim,
                                 const mx_uint **out_pdata);
 /*!
  * \brief get the content of the data in NDArray
@@ -396,16 +374,14 @@ MXNET_DLL int MXNDArrayGetShape(NDArrayHandle handle,
  * \param out_pdata pointer holder to get pointer of data
  * \return 0 when success, -1 when failure happens
  */
-MXNET_DLL int MXNDArrayGetData(NDArrayHandle handle,
-                               void **out_pdata);
+MXNET_DLL int MXNDArrayGetData(NDArrayHandle handle, void **out_pdata);
 /*!
  * \brief get the type of the data in NDArray
  * \param handle the handle to the narray
  * \param out_dtype pointer holder to get type of data
  * \return 0 when success, -1 when failure happens
  */
-MXNET_DLL int MXNDArrayGetDType(NDArrayHandle handle,
-                               int *out_dtype);
+MXNET_DLL int MXNDArrayGetDType(NDArrayHandle handle, int *out_dtype);
 /*!
  * \brief get the context of the NDArray
  * \param handle the handle to the narray
@@ -413,8 +389,7 @@ MXNET_DLL int MXNDArrayGetDType(NDArrayHandle handle,
  * \param out_dev_id the output device id
  * \return 0 when success, -1 when failure happens
  */
-MXNET_DLL int MXNDArrayGetContext(NDArrayHandle handle,
-                                  int *out_dev_type,
+MXNET_DLL int MXNDArrayGetContext(NDArrayHandle handle, int *out_dev_type,
                                   int *out_dev_id);
 /*!
  * \brief detach and ndarray from computation graph by clearing entry_
@@ -446,16 +421,14 @@ MXNET_DLL int MXNDArrayGetGradState(NDArrayHandle handle, int *out);
  * \param out_array the output function array
  * \return 0 when success, -1 when failure happens
  */
-MXNET_DLL int MXListFunctions(mx_uint *out_size,
-                              FunctionHandle **out_array);
+MXNET_DLL int MXListFunctions(mx_uint *out_size, FunctionHandle **out_array);
 /*!
  * \brief get the function handle by name
  * \param name the name of the function
  * \param out the corresponding function handle
  * \return 0 when success, -1 when failure happens
  */
-MXNET_DLL int MXGetFunction(const char *name,
-                            FunctionHandle *out);
+MXNET_DLL int MXGetFunction(const char *name, FunctionHandle *out);
 /*!
  * \brief Get the information of the function handle.
  * \param fun The function handle.
@@ -468,10 +441,8 @@ MXNET_DLL int MXGetFunction(const char *name,
  * \param return_type Return type of the function.
  * \return 0 when success, -1 when failure happens
  */
-MXNET_DLL int MXFuncGetInfo(FunctionHandle fun,
-                            const char **name,
-                            const char **description,
-                            mx_uint *num_args,
+MXNET_DLL int MXFuncGetInfo(FunctionHandle fun, const char **name,
+                            const char **description, mx_uint *num_args,
                             const char ***arg_names,
                             const char ***arg_type_infos,
                             const char ***arg_descriptions,
@@ -486,10 +457,8 @@ MXNET_DLL int MXFuncGetInfo(FunctionHandle fun,
  * \return 0 when success, -1 when failure happens
  * \sa MXFuncInvoke
  */
-MXNET_DLL int MXFuncDescribe(FunctionHandle fun,
-                             mx_uint *num_use_vars,
-                             mx_uint *num_scalars,
-                             mx_uint *num_mutate_vars,
+MXNET_DLL int MXFuncDescribe(FunctionHandle fun, mx_uint *num_use_vars,
+                             mx_uint *num_scalars, mx_uint *num_mutate_vars,
                              int *type_mask);
 /*!
  * \brief invoke a function, the array size of passed in arguments
@@ -501,10 +470,8 @@ MXNET_DLL int MXFuncDescribe(FunctionHandle fun,
  * \return 0 when success, -1 when failure happens
  * \sa MXFuncDescribeArgs
  */
-MXNET_DLL int MXFuncInvoke(FunctionHandle fun,
-                           NDArrayHandle *use_vars,
-                           mx_float *scalar_args,
-                           NDArrayHandle *mutate_vars);
+MXNET_DLL int MXFuncInvoke(FunctionHandle fun, NDArrayHandle *use_vars,
+                           mx_float *scalar_args, NDArrayHandle *mutate_vars);
 /*!
  * \brief invoke a function, the array size of passed in arguments
  *   must match the values in the
@@ -518,12 +485,9 @@ MXNET_DLL int MXFuncInvoke(FunctionHandle fun,
  * \return 0 when success, -1 when failure happens
  * \sa MXFuncDescribeArgs
  */
-MXNET_DLL int MXFuncInvokeEx(FunctionHandle fun,
-                             NDArrayHandle *use_vars,
-                             mx_float *scalar_args,
-                             NDArrayHandle *mutate_vars,
-                             int num_params,
-                             char **param_keys,
+MXNET_DLL int MXFuncInvokeEx(FunctionHandle fun, NDArrayHandle *use_vars,
+                             mx_float *scalar_args, NDArrayHandle *mutate_vars,
+                             int num_params, char **param_keys,
                              char **param_vals);
 /*!
  * \brief invoke a nnvm op and imperative function
@@ -537,12 +501,9 @@ MXNET_DLL int MXFuncInvokeEx(FunctionHandle fun,
  * \param param_vals values for keyword parameters
  * \return 0 when success, -1 when failure happens
  */
-MXNET_DLL int MXImperativeInvoke(AtomicSymbolCreator creator,
-                                 int num_inputs,
-                                 NDArrayHandle *inputs,
-                                 int *num_outputs,
-                                 NDArrayHandle **outputs,
-                                 int num_params,
+MXNET_DLL int MXImperativeInvoke(AtomicSymbolCreator creator, int num_inputs,
+                                 NDArrayHandle *inputs, int *num_outputs,
+                                 NDArrayHandle **outputs, int num_params,
                                  const char **param_keys,
                                  const char **param_vals);
 /*!
@@ -551,7 +512,7 @@ MXNET_DLL int MXImperativeInvoke(AtomicSymbolCreator creator,
  * \param prev returns the previous status before this set.
  * \return 0 when success, -1 when failure happens
  */
-MXNET_DLL int MXAutogradSetIsTraining(int is_training, int* prev);
+MXNET_DLL int MXAutogradSetIsTraining(int is_training, int *prev);
 /*!
  * \brief mark NDArrays as variables to compute gradient for autograd
  * \param num_var number of variable NDArrays
@@ -569,7 +530,7 @@ MXNET_DLL int MXAutogradMarkVariables(mx_uint num_var,
  * \return 0 when success, -1 when failure happens
  */
 MXNET_DLL int MXAutogradComputeGradient(mx_uint num_output,
-                                        NDArrayHandle* output_handles);
+                                        NDArrayHandle *output_handles);
 /*!
  * \brief compute the gradient of outputs w.r.t variabels
  * \param num_output number of output NDArray
@@ -579,18 +540,15 @@ MXNET_DLL int MXAutogradComputeGradient(mx_uint num_output,
  * \return 0 when success, -1 when failure happens
  */
 MXNET_DLL int MXAutogradBackward(mx_uint num_output,
-                                 NDArrayHandle* output_handles,
-                                 NDArrayHandle* ograd_handles,
+                                 NDArrayHandle *output_handles,
+                                 NDArrayHandle *ograd_handles,
                                  int retain_graph);
 /*!
  * \brief create cached operator
  */
-MXNET_DLL int MXCachedCreateOp(AtomicSymbolCreator creator,
-                               int num_inputs,
-                               int num_params,
-                               const char **param_keys,
-                               const char **param_vals,
-                               CachedOpHandle *out);
+MXNET_DLL int MXCachedCreateOp(AtomicSymbolCreator creator, int num_inputs,
+                               int num_params, const char **param_keys,
+                               const char **param_vals, CachedOpHandle *out);
 /*!
  * \brief free cached operator
  */
@@ -598,10 +556,8 @@ MXNET_DLL int MXCachedFree(CachedOpHandle handle);
 /*!
  * \brief invoke cached operator
  */
-MXNET_DLL int MXCachedInvoke(CachedOpHandle handle,
-                             int num_inputs,
-                             NDArrayHandle *inputs,
-                             int *num_outputs,
+MXNET_DLL int MXCachedInvoke(CachedOpHandle handle, int num_inputs,
+                             NDArrayHandle *inputs, int *num_outputs,
                              NDArrayHandle **outputs);
 //--------------------------------------------
 // Part 3: symbolic configuration generation
@@ -612,8 +568,7 @@ MXNET_DLL int MXCachedInvoke(CachedOpHandle handle,
  * \param out_array the output operator name array.
  * \return 0 when success, -1 when failure happens
  */
-MXNET_DLL int MXListAllOpNames(mx_uint *out_size,
-                               const char ***out_array);
+MXNET_DLL int MXListAllOpNames(mx_uint *out_size, const char ***out_array);
 /*!
  * \brief list all the available AtomicSymbolEntry
  * \param out_size the size of returned array
@@ -639,23 +594,22 @@ MXNET_DLL int MXSymbolGetAtomicSymbolName(AtomicSymbolCreator creator,
  * \param arg_names Name of the arguments.
  * \param arg_type_infos Type informations about the arguments.
  * \param arg_descriptions Description information about the arguments.
- * \param key_var_num_args The keyword argument for specifying variable number of arguments.
- *            When this parameter has non-zero length, the function allows variable number
+ * \param key_var_num_args The keyword argument for specifying variable number
+ * of arguments.
+ *            When this parameter has non-zero length, the function allows
+ * variable number
  *            of positional arguments, and will need the caller to pass it in in
  *            MXSymbolCreateAtomicSymbol,
- *            With key = key_var_num_args, and value = number of positional arguments.
+ *            With key = key_var_num_args, and value = number of positional
+ * arguments.
  * \param return_type Return type of the function, can be Symbol or Symbol[]
  * \return 0 when success, -1 when failure happens
  */
-MXNET_DLL int MXSymbolGetAtomicSymbolInfo(AtomicSymbolCreator creator,
-                                          const char **name,
-                                          const char **description,
-                                          mx_uint *num_args,
-                                          const char ***arg_names,
-                                          const char ***arg_type_infos,
-                                          const char ***arg_descriptions,
-                                          const char **key_var_num_args,
-                                          const char **return_type DEFAULT(NULL));
+MXNET_DLL int MXSymbolGetAtomicSymbolInfo(
+    AtomicSymbolCreator creator, const char **name, const char **description,
+    mx_uint *num_args, const char ***arg_names, const char ***arg_type_infos,
+    const char ***arg_descriptions, const char **key_var_num_args,
+    const char **return_type DEFAULT(NULL));
 /*!
  * \brief Create an AtomicSymbol.
  * \param creator the AtomicSymbolCreator
@@ -666,10 +620,8 @@ MXNET_DLL int MXSymbolGetAtomicSymbolInfo(AtomicSymbolCreator creator,
  * \return 0 when success, -1 when failure happens
  */
 MXNET_DLL int MXSymbolCreateAtomicSymbol(AtomicSymbolCreator creator,
-                                         mx_uint num_param,
-                                         const char **keys,
-                                         const char **vals,
-                                         SymbolHandle *out);
+                                         mx_uint num_param, const char **keys,
+                                         const char **vals, SymbolHandle *out);
 /*!
  * \brief Create an AtomicSymbol from cached op.
  * \param handle cached node attribute.
@@ -678,11 +630,9 @@ MXNET_DLL int MXSymbolCreateAtomicSymbol(AtomicSymbolCreator creator,
  * \param args symbol arguments
  * \return 0 when success, -1 when failure happens
  */
-MXNET_DLL int MXCachedCreateSymbol(CachedOpHandle handle,
-                                   const char* name,
-                                   mx_uint num_args,
-                                   SymbolHandle* args,
-                                   SymbolHandle* out);
+MXNET_DLL int MXCachedCreateSymbol(CachedOpHandle handle, const char *name,
+                                   mx_uint num_args, SymbolHandle *args,
+                                   SymbolHandle *out);
 /*!
  * \brief Create a Variable Symbol.
  * \param name name of the variable
@@ -697,8 +647,7 @@ MXNET_DLL int MXSymbolCreateVariable(const char *name, SymbolHandle *out);
  * \param out pointer to the created symbol handle
  * \return 0 when success, -1 when failure happens
  */
-MXNET_DLL int MXSymbolCreateGroup(mx_uint num_symbols,
-                                  SymbolHandle *symbols,
+MXNET_DLL int MXSymbolCreateGroup(mx_uint num_symbols, SymbolHandle *symbols,
                                   SymbolHandle *out);
 /*!
  * \brief Load a symbol from a json file.
@@ -755,8 +704,7 @@ MXNET_DLL int MXSymbolPrint(SymbolHandle symbol, const char **out_str);
  * \param success Whether the result is contained in out.
  * \return 0 when success, -1 when failure happens
  */
-MXNET_DLL int MXSymbolGetName(SymbolHandle symbol,
-                              const char** out,
+MXNET_DLL int MXSymbolGetName(SymbolHandle symbol, const char **out,
                               int *success);
 /*!
  * \brief Get string attribute from symbol
@@ -766,29 +714,29 @@ MXNET_DLL int MXSymbolGetName(SymbolHandle symbol,
  * \param success Whether the result is contained in out.
  * \return 0 when success, -1 when failure happens
  */
-MXNET_DLL int MXSymbolGetAttr(SymbolHandle symbol,
-                              const char* key,
-                              const char** out,
-                              int *success);
+MXNET_DLL int MXSymbolGetAttr(SymbolHandle symbol, const char *key,
+                              const char **out, int *success);
 /*!
  * \brief Set string attribute from symbol.
- *  NOTE: Setting attribute to a symbol can affect the semantics(mutable/immutable) of symbolic graph.
+ *  NOTE: Setting attribute to a symbol can affect the
+ * semantics(mutable/immutable) of symbolic graph.
  *
  *  Safe recommendaton: use  immutable graph
- *  - Only allow set attributes during creation of new symbol as optional parameter
+ *  - Only allow set attributes during creation of new symbol as optional
+ * parameter
  *
  *  Mutable graph (be careful about the semantics):
  *  - Allow set attr at any point.
- *  - Mutating an attribute of some common node of two graphs can cause confusion from user.
+ *  - Mutating an attribute of some common node of two graphs can cause
+ * confusion from user.
  *
  * \param symbol the source symbol
  * \param key The key of the symbol.
  * \param value The value to be saved.
  * \return 0 when success, -1 when failure happens
  */
-MXNET_DLL int MXSymbolSetAttr(SymbolHandle symbol,
-                              const char* key,
-                              const char* value);
+MXNET_DLL int MXSymbolSetAttr(SymbolHandle symbol, const char *key,
+                              const char *value);
 /*!
  * \brief Get all attributes from symbol, including all descendents.
  * \param symbol the source symbol
@@ -796,9 +744,8 @@ MXNET_DLL int MXSymbolSetAttr(SymbolHandle symbol,
  * \param out 2*out_size strings representing key value pairs.
  * \return 0 when success, -1 when failure happens
  */
-MXNET_DLL int MXSymbolListAttr(SymbolHandle symbol,
-                               mx_uint *out_size,
-                               const char*** out);
+MXNET_DLL int MXSymbolListAttr(SymbolHandle symbol, mx_uint *out_size,
+                               const char ***out);
 /*!
  * \brief Get all attributes from symbol, excluding descendents.
  * \param symbol the source symbol
@@ -806,9 +753,8 @@ MXNET_DLL int MXSymbolListAttr(SymbolHandle symbol,
  * \param out 2*out_size strings representing key value pairs.
  * \return 0 when success, -1 when failure happens
  */
-MXNET_DLL int MXSymbolListAttrShallow(SymbolHandle symbol,
-                                      mx_uint *out_size,
-                                      const char*** out);
+MXNET_DLL int MXSymbolListAttrShallow(SymbolHandle symbol, mx_uint *out_size,
+                                      const char ***out);
 /*!
  * \brief List arguments in the symbol.
  * \param symbol the symbol
@@ -816,8 +762,7 @@ MXNET_DLL int MXSymbolListAttrShallow(SymbolHandle symbol,
  * \param out_str_array pointer to hold the output string array
  * \return 0 when success, -1 when failure happens
  */
-MXNET_DLL int MXSymbolListArguments(SymbolHandle symbol,
-                                    mx_uint *out_size,
+MXNET_DLL int MXSymbolListArguments(SymbolHandle symbol, mx_uint *out_size,
                                     const char ***out_str_array);
 /*!
  * \brief List returns in the symbol.
@@ -826,8 +771,7 @@ MXNET_DLL int MXSymbolListArguments(SymbolHandle symbol,
  * \param out_str_array pointer to hold the output string array
  * \return 0 when success, -1 when failure happens
  */
-MXNET_DLL int MXSymbolListOutputs(SymbolHandle symbol,
-                                  mx_uint *out_size,
+MXNET_DLL int MXSymbolListOutputs(SymbolHandle symbol, mx_uint *out_size,
                                   const char ***out_str_array);
 /*!
  * \brief Get a symbol that contains all the internals.
@@ -835,16 +779,14 @@ MXNET_DLL int MXSymbolListOutputs(SymbolHandle symbol,
  * \param out The output symbol whose outputs are all the internals.
  * \return 0 when success, -1 when failure happens
  */
-MXNET_DLL int MXSymbolGetInternals(SymbolHandle symbol,
-                                   SymbolHandle *out);
+MXNET_DLL int MXSymbolGetInternals(SymbolHandle symbol, SymbolHandle *out);
 /*!
  * \brief Get a symbol that contains only direct children.
  * \param symbol The symbol
  * \param out The output symbol whose outputs are the direct children.
  * \return 0 when success, -1 when failure happens
  */
-MXNET_DLL int MXSymbolGetChildren(SymbolHandle symbol,
-                                  SymbolHandle *out);
+MXNET_DLL int MXSymbolGetChildren(SymbolHandle symbol, SymbolHandle *out);
 /*!
  * \brief Get index-th outputs of the symbol.
  * \param symbol The symbol
@@ -852,8 +794,7 @@ MXNET_DLL int MXSymbolGetChildren(SymbolHandle symbol,
  * \param out The output symbol whose outputs are the index-th symbol.
  * \return 0 when success, -1 when failure happens
  */
-MXNET_DLL int MXSymbolGetOutput(SymbolHandle symbol,
-                                mx_uint index,
+MXNET_DLL int MXSymbolGetOutput(SymbolHandle symbol, mx_uint index,
                                 SymbolHandle *out);
 /*!
  * \brief List auxiliary states in the symbol.
@@ -879,11 +820,9 @@ MXNET_DLL int MXSymbolListAuxiliaryStates(SymbolHandle symbol,
  * \param args arguments to sym
  * \return 0 when success, -1 when failure happens
  */
-MXNET_DLL int MXSymbolCompose(SymbolHandle sym,
-                              const char *name,
-                              mx_uint num_args,
-                              const char** keys,
-                              SymbolHandle* args);
+MXNET_DLL int MXSymbolCompose(SymbolHandle sym, const char *name,
+                              mx_uint num_args, const char **keys,
+                              SymbolHandle *args);
 /*!
  * \brief Get the gradient graph of the symbol
  *
@@ -893,14 +832,14 @@ MXNET_DLL int MXSymbolCompose(SymbolHandle sym,
  * \param out the returned symbol that has gradient
  * \return 0 when success, -1 when failure happens
  */
-MXNET_DLL int MXSymbolGrad(SymbolHandle sym,
-                           mx_uint num_wrt,
-                           const char** wrt,
-                           SymbolHandle* out);
+MXNET_DLL int MXSymbolGrad(SymbolHandle sym, mx_uint num_wrt, const char **wrt,
+                           SymbolHandle *out);
 /*!
  * \brief infer shape of unknown input shapes given the known one.
- *  The shapes are packed into a CSR matrix represented by arg_ind_ptr and arg_shape_data
- *  The call will be treated as a kwargs call if key != nullptr or num_args==0, otherwise it is positional.
+ *  The shapes are packed into a CSR matrix represented by arg_ind_ptr and
+ * arg_shape_data
+ *  The call will be treated as a kwargs call if key != nullptr or num_args==0,
+ * otherwise it is positional.
  *
  * \param sym symbol handle
  * \param num_args numbe of input arguments.
@@ -908,38 +847,37 @@ MXNET_DLL int MXSymbolGrad(SymbolHandle sym,
  * \param arg_ind_ptr the head pointer of the rows in CSR
  * \param arg_shape_data the content of the CSR
  * \param in_shape_size sizeof the returning array of in_shapes
- * \param in_shape_ndim returning array of shape dimensions of eachs input shape.
+ * \param in_shape_ndim returning array of shape dimensions of eachs input
+ * shape.
  * \param in_shape_data returning array of pointers to head of the input shape.
  * \param out_shape_size sizeof the returning array of out_shapes
- * \param out_shape_ndim returning array of shape dimensions of eachs input shape.
+ * \param out_shape_ndim returning array of shape dimensions of eachs input
+ * shape.
  * \param out_shape_data returning array of pointers to head of the input shape.
  * \param aux_shape_size sizeof the returning array of aux_shapes
- * \param aux_shape_ndim returning array of shape dimensions of eachs auxiliary shape.
- * \param aux_shape_data returning array of pointers to head of the auxiliary shape.
+ * \param aux_shape_ndim returning array of shape dimensions of eachs auxiliary
+ * shape.
+ * \param aux_shape_data returning array of pointers to head of the auxiliary
+ * shape.
  * \param complete whether infer shape completes or more information is needed.
  * \return 0 when success, -1 when failure happens
  */
-MXNET_DLL int MXSymbolInferShape(SymbolHandle sym,
-                                 mx_uint num_args,
-                                 const char** keys,
-                                 const mx_uint *arg_ind_ptr,
-                                 const mx_uint *arg_shape_data,
-                                 mx_uint *in_shape_size,
-                                 const mx_uint **in_shape_ndim,
-                                 const mx_uint ***in_shape_data,
-                                 mx_uint *out_shape_size,
-                                 const mx_uint **out_shape_ndim,
-                                 const mx_uint ***out_shape_data,
-                                 mx_uint *aux_shape_size,
-                                 const mx_uint **aux_shape_ndim,
-                                 const mx_uint ***aux_shape_data,
-                                 int *complete);
+MXNET_DLL int MXSymbolInferShape(
+    SymbolHandle sym, mx_uint num_args, const char **keys,
+    const mx_uint *arg_ind_ptr, const mx_uint *arg_shape_data,
+    mx_uint *in_shape_size, const mx_uint **in_shape_ndim,
+    const mx_uint ***in_shape_data, mx_uint *out_shape_size,
+    const mx_uint **out_shape_ndim, const mx_uint ***out_shape_data,
+    mx_uint *aux_shape_size, const mx_uint **aux_shape_ndim,
+    const mx_uint ***aux_shape_data, int *complete);
 /*!
  * \brief partially infer shape of unknown input shapes given the known one.
  *
  *  Return partially inferred results if not all shapes could be inferred.
- *  The shapes are packed into a CSR matrix represented by arg_ind_ptr and arg_shape_data
- *  The call will be treated as a kwargs call if key != nullptr or num_args==0, otherwise it is positional.
+ *  The shapes are packed into a CSR matrix represented by arg_ind_ptr and
+ * arg_shape_data
+ *  The call will be treated as a kwargs call if key != nullptr or num_args==0,
+ * otherwise it is positional.
  *
  * \param sym symbol handle
  * \param num_args numbe of input arguments.
@@ -947,37 +885,36 @@ MXNET_DLL int MXSymbolInferShape(SymbolHandle sym,
  * \param arg_ind_ptr the head pointer of the rows in CSR
  * \param arg_shape_data the content of the CSR
  * \param in_shape_size sizeof the returning array of in_shapes
- * \param in_shape_ndim returning array of shape dimensions of eachs input shape.
+ * \param in_shape_ndim returning array of shape dimensions of eachs input
+ * shape.
  * \param in_shape_data returning array of pointers to head of the input shape.
  * \param out_shape_size sizeof the returning array of out_shapes
- * \param out_shape_ndim returning array of shape dimensions of eachs input shape.
+ * \param out_shape_ndim returning array of shape dimensions of eachs input
+ * shape.
  * \param out_shape_data returning array of pointers to head of the input shape.
  * \param aux_shape_size sizeof the returning array of aux_shapes
- * \param aux_shape_ndim returning array of shape dimensions of eachs auxiliary shape.
- * \param aux_shape_data returning array of pointers to head of the auxiliary shape.
+ * \param aux_shape_ndim returning array of shape dimensions of eachs auxiliary
+ * shape.
+ * \param aux_shape_data returning array of pointers to head of the auxiliary
+ * shape.
  * \param complete whether infer shape completes or more information is needed.
  * \return 0 when success, -1 when failure happens
  */
-MXNET_DLL int MXSymbolInferShapePartial(SymbolHandle sym,
-                                 mx_uint num_args,
-                                 const char** keys,
-                                 const mx_uint *arg_ind_ptr,
-                                 const mx_uint *arg_shape_data,
-                                 mx_uint *in_shape_size,
-                                 const mx_uint **in_shape_ndim,
-                                 const mx_uint ***in_shape_data,
-                                 mx_uint *out_shape_size,
-                                 const mx_uint **out_shape_ndim,
-                                 const mx_uint ***out_shape_data,
-                                 mx_uint *aux_shape_size,
-                                 const mx_uint **aux_shape_ndim,
-                                 const mx_uint ***aux_shape_data,
-                                 int *complete);
+MXNET_DLL int MXSymbolInferShapePartial(
+    SymbolHandle sym, mx_uint num_args, const char **keys,
+    const mx_uint *arg_ind_ptr, const mx_uint *arg_shape_data,
+    mx_uint *in_shape_size, const mx_uint **in_shape_ndim,
+    const mx_uint ***in_shape_data, mx_uint *out_shape_size,
+    const mx_uint **out_shape_ndim, const mx_uint ***out_shape_data,
+    mx_uint *aux_shape_size, const mx_uint **aux_shape_ndim,
+    const mx_uint ***aux_shape_data, int *complete);
 
 /*!
  * \brief infer type of unknown input types given the known one.
- *  The types are packed into a CSR matrix represented by arg_ind_ptr and arg_type_data
- *  The call will be treated as a kwargs call if key != nullptr or num_args==0, otherwise it is positional.
+ *  The types are packed into a CSR matrix represented by arg_ind_ptr and
+ * arg_type_data
+ *  The call will be treated as a kwargs call if key != nullptr or num_args==0,
+ * otherwise it is positional.
  *
  * \param sym symbol handle
  * \param num_args numbe of input arguments.
@@ -988,21 +925,18 @@ MXNET_DLL int MXSymbolInferShapePartial(SymbolHandle sym,
  * \param out_type_size sizeof the returning array of out_types
  * \param out_type_data returning array of pointers to head of the input type.
  * \param aux_type_size sizeof the returning array of aux_types
- * \param aux_type_data returning array of pointers to head of the auxiliary type.
+ * \param aux_type_data returning array of pointers to head of the auxiliary
+ * type.
  * \param complete whether infer type completes or more information is needed.
  * \return 0 when success, -1 when failure happens
  */
-MXNET_DLL int MXSymbolInferType(SymbolHandle sym,
-                                mx_uint num_args,
-                                const char** keys,
-                                const int *arg_type_data,
-                                mx_uint *in_type_size,
-                                const int **in_type_data,
+MXNET_DLL int MXSymbolInferType(SymbolHandle sym, mx_uint num_args,
+                                const char **keys, const int *arg_type_data,
+                                mx_uint *in_type_size, const int **in_type_data,
                                 mx_uint *out_type_size,
                                 const int **out_type_data,
                                 mx_uint *aux_type_size,
-                                const int **aux_type_data,
-                                int *complete);
+                                const int **aux_type_data, int *complete);
 //--------------------------------------------
 // Part 4: Executor interface
 //--------------------------------------------
@@ -1023,7 +957,8 @@ MXNET_DLL int MXExecutorPrint(ExecutorHandle handle, const char **out_str);
  * \brief Executor forward method
  *
  * \param handle executor handle
- * \param is_train int value to indicate whether the forward pass is for evaluation
+ * \param is_train int value to indicate whether the forward pass is for
+ * evaluation
  * \return 0 when success, -1 when failure happens
  */
 MXNET_DLL int MXExecutorForward(ExecutorHandle handle, int is_train);
@@ -1036,8 +971,7 @@ MXNET_DLL int MXExecutorForward(ExecutorHandle handle, int is_train);
  *
  * \return 0 when success, -1 when failure happens
  */
-MXNET_DLL int MXExecutorBackward(ExecutorHandle handle,
-                                 mx_uint len,
+MXNET_DLL int MXExecutorBackward(ExecutorHandle handle, mx_uint len,
                                  NDArrayHandle *head_grads);
 
 /*!
@@ -1048,8 +982,7 @@ MXNET_DLL int MXExecutorBackward(ExecutorHandle handle,
  * \param out out put narray handles
  * \return 0 when success, -1 when failure happens
  */
-MXNET_DLL int MXExecutorOutputs(ExecutorHandle handle,
-                                mx_uint *out_size,
+MXNET_DLL int MXExecutorOutputs(ExecutorHandle handle, mx_uint *out_size,
                                 NDArrayHandle **out);
 
 /*!
@@ -1067,16 +1000,11 @@ MXNET_DLL int MXExecutorOutputs(ExecutorHandle handle,
  * \param out output executor handle
  * \return 0 when success, -1 when failure happens
  */
-MXNET_DLL int MXExecutorBind(SymbolHandle symbol_handle,
-                             int dev_type,
-                             int dev_id,
-                             mx_uint len,
-                             NDArrayHandle *in_args,
+MXNET_DLL int MXExecutorBind(SymbolHandle symbol_handle, int dev_type,
+                             int dev_id, mx_uint len, NDArrayHandle *in_args,
                              NDArrayHandle *arg_grad_store,
-                             mx_uint *grad_req_type,
-                             mx_uint aux_states_len,
-                             NDArrayHandle *aux_states,
-                             ExecutorHandle *out);
+                             mx_uint *grad_req_type, mx_uint aux_states_len,
+                             NDArrayHandle *aux_states, ExecutorHandle *out);
 /*!
  * \brief Generate Executor from symbol,
  *  This is advanced function, allow specify group2ctx map.
@@ -1098,20 +1026,14 @@ MXNET_DLL int MXExecutorBind(SymbolHandle symbol_handle,
  * \param out output executor handle
  * \return 0 when success, -1 when failure happens
  */
-MXNET_DLL int MXExecutorBindX(SymbolHandle symbol_handle,
-                              int dev_type,
-                              int dev_id,
-                              mx_uint num_map_keys,
-                              const char** map_keys,
-                              const int* map_dev_types,
-                              const int* map_dev_ids,
-                              mx_uint len,
+MXNET_DLL int MXExecutorBindX(SymbolHandle symbol_handle, int dev_type,
+                              int dev_id, mx_uint num_map_keys,
+                              const char **map_keys, const int *map_dev_types,
+                              const int *map_dev_ids, mx_uint len,
                               NDArrayHandle *in_args,
                               NDArrayHandle *arg_grad_store,
-                              mx_uint *grad_req_type,
-                              mx_uint aux_states_len,
-                              NDArrayHandle *aux_states,
-                              ExecutorHandle *out);
+                              mx_uint *grad_req_type, mx_uint aux_states_len,
+                              NDArrayHandle *aux_states, ExecutorHandle *out);
 /*!
  * \brief Generate Executor from symbol,
  *  This is advanced function, allow specify group2ctx map.
@@ -1134,27 +1056,18 @@ MXNET_DLL int MXExecutorBindX(SymbolHandle symbol_handle,
  * \param out output executor handle
  * \return 0 when success, -1 when failure happens
  */
-MXNET_DLL int MXExecutorBindEX(SymbolHandle symbol_handle,
-                               int dev_type,
-                               int dev_id,
-                               mx_uint num_map_keys,
-                               const char** map_keys,
-                               const int* map_dev_types,
-                               const int* map_dev_ids,
-                               mx_uint len,
-                               NDArrayHandle *in_args,
-                               NDArrayHandle *arg_grad_store,
-                               mx_uint *grad_req_type,
-                               mx_uint aux_states_len,
-                               NDArrayHandle *aux_states,
-                               ExecutorHandle shared_exec,
-                               ExecutorHandle *out);
+MXNET_DLL int MXExecutorBindEX(
+    SymbolHandle symbol_handle, int dev_type, int dev_id, mx_uint num_map_keys,
+    const char **map_keys, const int *map_dev_types, const int *map_dev_ids,
+    mx_uint len, NDArrayHandle *in_args, NDArrayHandle *arg_grad_store,
+    mx_uint *grad_req_type, mx_uint aux_states_len, NDArrayHandle *aux_states,
+    ExecutorHandle shared_exec, ExecutorHandle *out);
 /*!
  * \brief set a call back to notify the completion of operation
  */
 MXNET_DLL int MXExecutorSetMonitorCallback(ExecutorHandle handle,
                                            ExecutorMonitorCallback callback,
-                                           void* callback_handle);
+                                           void *callback_handle);
 //--------------------------------------------
 // Part 5: IO Interface
 //--------------------------------------------
@@ -1164,8 +1077,7 @@ MXNET_DLL int MXExecutorSetMonitorCallback(ExecutorHandle handle,
  * \param out_array the output iteratos entries
  * \return 0 when success, -1 when failure happens
  */
-MXNET_DLL int MXListDataIters(mx_uint *out_size,
-                              DataIterCreator **out_array);
+MXNET_DLL int MXListDataIters(mx_uint *out_size, DataIterCreator **out_array);
 /*!
  * \brief Init an iterator, init with parameters
  * the array size of passed in arguments
@@ -1176,10 +1088,8 @@ MXNET_DLL int MXListDataIters(mx_uint *out_size,
  * \param out resulting iterator
  * \return 0 when success, -1 when failure happens
  */
-MXNET_DLL int MXDataIterCreateIter(DataIterCreator handle,
-                                   mx_uint num_param,
-                                   const char **keys,
-                                   const char **vals,
+MXNET_DLL int MXDataIterCreateIter(DataIterCreator handle, mx_uint num_param,
+                                   const char **keys, const char **vals,
                                    DataIterHandle *out);
 /*!
  * \brief Get the detailed information about data iterator.
@@ -1192,10 +1102,8 @@ MXNET_DLL int MXDataIterCreateIter(DataIterCreator handle,
  * \param arg_descriptions Description information about the arguments.
  * \return 0 when success, -1 when failure happens
  */
-MXNET_DLL int MXDataIterGetIterInfo(DataIterCreator creator,
-                                    const char **name,
-                                    const char **description,
-                                    mx_uint *num_args,
+MXNET_DLL int MXDataIterGetIterInfo(DataIterCreator creator, const char **name,
+                                    const char **description, mx_uint *num_args,
                                     const char ***arg_names,
                                     const char ***arg_type_infos,
                                     const char ***arg_descriptions);
@@ -1211,8 +1119,7 @@ MXNET_DLL int MXDataIterFree(DataIterHandle handle);
  * \param out return value of next
  * \return 0 when success, -1 when failure happens
  */
-MXNET_DLL int MXDataIterNext(DataIterHandle handle,
-                             int *out);
+MXNET_DLL int MXDataIterNext(DataIterHandle handle, int *out);
 /*!
  * \brief Call iterator.Reset
  * \param handle the handle to iterator
@@ -1226,8 +1133,7 @@ MXNET_DLL int MXDataIterBeforeFirst(DataIterHandle handle);
  * \param out handle to underlying data NDArray
  * \return 0 when success, -1 when failure happens
  */
-MXNET_DLL int MXDataIterGetData(DataIterHandle handle,
-                                NDArrayHandle *out);
+MXNET_DLL int MXDataIterGetData(DataIterHandle handle, NDArrayHandle *out);
 /*!
  * \brief Get the image index by array.
  * \param handle the handle pointer to the data iterator
@@ -1235,8 +1141,7 @@ MXNET_DLL int MXDataIterGetData(DataIterHandle handle,
  * \param out_size output size of the array.
  * \return 0 when success, -1 when failure happens
  */
-MXNET_DLL int MXDataIterGetIndex(DataIterHandle handle,
-                                 uint64_t **out_index,
+MXNET_DLL int MXDataIterGetIndex(DataIterHandle handle, uint64_t **out_index,
                                  uint64_t *out_size);
 /*!
  * \brief Get the padding number in current data batch
@@ -1244,8 +1149,7 @@ MXNET_DLL int MXDataIterGetIndex(DataIterHandle handle,
  * \param pad pad number ptr
  * \return 0 when success, -1 when failure happens
  */
-MXNET_DLL int MXDataIterGetPadNum(DataIterHandle handle,
-                                  int *pad);
+MXNET_DLL int MXDataIterGetPadNum(DataIterHandle handle, int *pad);
 
 /*!
  * \brief Get the handle to the NDArray of underlying label
@@ -1253,8 +1157,7 @@ MXNET_DLL int MXDataIterGetPadNum(DataIterHandle handle,
  * \param out the handle to underlying label NDArray
  * \return 0 when success, -1 when failure happens
  */
-MXNET_DLL int MXDataIterGetLabel(DataIterHandle handle,
-                                 NDArrayHandle *out);
+MXNET_DLL int MXDataIterGetLabel(DataIterHandle handle, NDArrayHandle *out);
 //--------------------------------------------
 // Part 6: basic KVStore interface
 //--------------------------------------------
@@ -1264,10 +1167,8 @@ MXNET_DLL int MXDataIterGetLabel(DataIterHandle handle,
  * \param keys environment keys
  * \param vals environment values
  */
-MXNET_DLL int MXInitPSEnv(mx_uint num_vars,
-                          const char **keys,
+MXNET_DLL int MXInitPSEnv(mx_uint num_vars, const char **keys,
                           const char **vals);
-
 
 /*!
  * \brief Create a kvstore
@@ -1275,8 +1176,7 @@ MXNET_DLL int MXInitPSEnv(mx_uint num_vars,
  * \param out The output type of KVStore
  * \return 0 when success, -1 when failure happens
  */
-MXNET_DLL int MXKVStoreCreate(const char *type,
-                              KVStoreHandle *out);
+MXNET_DLL int MXKVStoreCreate(const char *type, KVStoreHandle *out);
 /*!
  * \brief Delete a KVStore handle.
  * \param handle handle to the kvstore
@@ -1291,10 +1191,8 @@ MXNET_DLL int MXKVStoreFree(KVStoreHandle handle);
  * \param vals the list of values
  * \return 0 when success, -1 when failure happens
  */
-MXNET_DLL int MXKVStoreInit(KVStoreHandle handle,
-                            mx_uint num,
-                            const int* keys,
-                            NDArrayHandle* vals);
+MXNET_DLL int MXKVStoreInit(KVStoreHandle handle, mx_uint num, const int *keys,
+                            NDArrayHandle *vals);
 
 /*!
  * \brief Push a list of (key,value) pairs to kvstore
@@ -1305,11 +1203,8 @@ MXNET_DLL int MXKVStoreInit(KVStoreHandle handle,
  * \param priority the priority of the action
  * \return 0 when success, -1 when failure happens
  */
-MXNET_DLL int MXKVStorePush(KVStoreHandle handle,
-                            mx_uint num,
-                            const int* keys,
-                            NDArrayHandle* vals,
-                            int priority);
+MXNET_DLL int MXKVStorePush(KVStoreHandle handle, mx_uint num, const int *keys,
+                            NDArrayHandle *vals, int priority);
 /*!
  * \brief pull a list of (key, value) pairs from the kvstore
  * \param handle handle to the kvstore
@@ -1319,11 +1214,8 @@ MXNET_DLL int MXKVStorePush(KVStoreHandle handle,
  * \param priority the priority of the action
  * \return 0 when success, -1 when failure happens
  */
-MXNET_DLL int MXKVStorePull(KVStoreHandle handle,
-                            mx_uint num,
-                            const int* keys,
-                            NDArrayHandle* vals,
-                            int priority);
+MXNET_DLL int MXKVStorePull(KVStoreHandle handle, mx_uint num, const int *keys,
+                            NDArrayHandle *vals, int priority);
 /*!
  * \brief user-defined updater for the kvstore
  * It's this updater's responsibility to delete \a recv and \a local
@@ -1332,10 +1224,8 @@ MXNET_DLL int MXKVStorePull(KVStoreHandle handle,
  * \param local the value stored on local on this key
  * \param handle The additional handle to the updater
  */
-typedef void (MXKVStoreUpdater)(int key,
-                                NDArrayHandle recv,
-                                NDArrayHandle local,
-                                void *handle);
+typedef void(MXKVStoreUpdater)(int key, NDArrayHandle recv, NDArrayHandle local,
+                               void *handle);
 /*!
  * \brief register an push updater
  * \param handle handle to the KVStore
@@ -1352,8 +1242,7 @@ MXNET_DLL int MXKVStoreSetUpdater(KVStoreHandle handle,
  * \param type a string type
  * \return 0 when success, -1 when failure happens
  */
-MXNET_DLL int MXKVStoreGetType(KVStoreHandle handle,
-                               const char** type);
+MXNET_DLL int MXKVStoreGetType(KVStoreHandle handle, const char **type);
 //--------------------------------------------
 // Part 6: advanced KVStore for multi-machines
 //--------------------------------------------
@@ -1365,8 +1254,7 @@ MXNET_DLL int MXKVStoreGetType(KVStoreHandle handle,
  * \param ret the node rank
  * \return 0 when success, -1 when failure happens
  */
-MXNET_DLL int MXKVStoreGetRank(KVStoreHandle handle,
-                               int *ret);
+MXNET_DLL int MXKVStoreGetRank(KVStoreHandle handle, int *ret);
 
 /**
  * \brief return The number of nodes in this group, which is
@@ -1377,8 +1265,7 @@ MXNET_DLL int MXKVStoreGetRank(KVStoreHandle handle,
  * \param ret the group size
  * \return 0 when success, -1 when failure happens
  */
-MXNET_DLL int MXKVStoreGetGroupSize(KVStoreHandle handle,
-                                    int *ret);
+MXNET_DLL int MXKVStoreGetGroupSize(KVStoreHandle handle, int *ret);
 
 /**
  * \brief return whether or not this process is a worker node.
@@ -1387,14 +1274,12 @@ MXNET_DLL int MXKVStoreGetGroupSize(KVStoreHandle handle,
  */
 MXNET_DLL int MXKVStoreIsWorkerNode(int *ret);
 
-
 /**
  * \brief return whether or not this process is a server node.
  * \param ret 1 for yes, 0 for no
  * \return 0 when success, -1 when failure happens
  */
 MXNET_DLL int MXKVStoreIsServerNode(int *ret);
-
 
 /**
  * \brief return whether or not this process is a scheduler node.
@@ -1427,9 +1312,8 @@ MXNET_DLL int MXKVStoreSetBarrierBeforeExit(KVStoreHandle handle,
  * \param body the body of the command
  * \param controller_handle helper handle for implementing controller
  */
-typedef void (MXKVStoreServerController)(int head,
-                                         const char *body,
-                                         void *controller_handle);
+typedef void(MXKVStoreServerController)(int head, const char *body,
+                                        void *controller_handle);
 
 /**
  * \return Run as server (or scheduler)
@@ -1451,9 +1335,8 @@ MXNET_DLL int MXKVStoreRunServer(KVStoreHandle handle,
  * \param cmd_body the body of the command
  * \return 0 when success, -1 when failure happens
  */
-MXNET_DLL int MXKVStoreSendCommmandToServers(KVStoreHandle handle,
-                                             int cmd_id,
-                                             const char* cmd_body);
+MXNET_DLL int MXKVStoreSendCommmandToServers(KVStoreHandle handle, int cmd_id,
+                                             const char *cmd_body);
 
 /**
  * \brief Get the number of ps dead node(s) specified by {node_id}
@@ -1465,8 +1348,7 @@ MXNET_DLL int MXKVStoreSendCommmandToServers(KVStoreHandle handle,
  * \param timeout_sec A node fails to send heartbeart in {timeout_sec} seconds
  *                    will be presumed as 'dead'
  */
-MXNET_DLL int MXKVStoreGetNumDeadNode(KVStoreHandle handle,
-                                      const int node_id,
+MXNET_DLL int MXKVStoreGetNumDeadNode(KVStoreHandle handle, const int node_id,
                                       int *number,
                                       const int timeout_sec DEFAULT(60));
 
@@ -1526,7 +1408,7 @@ MXNET_DLL int MXRecordIOReaderFree(RecordIOHandle handle);
  * \return 0 when success, -1 when failure happens
 */
 MXNET_DLL int MXRecordIOReaderReadRecord(RecordIOHandle handle,
-                                        char const **buf, size_t *size);
+                                         char const **buf, size_t *size);
 
 /**
  * \brief Set the current reader pointer position
@@ -1539,21 +1421,18 @@ MXNET_DLL int MXRecordIOReaderSeek(RecordIOHandle handle, size_t pos);
 /**
  * \brief Create a MXRtc object
 */
-MXNET_DLL int MXRtcCreate(char* name, mx_uint num_input, mx_uint num_output,
-                          char** input_names, char** output_names,
-                          NDArrayHandle* inputs, NDArrayHandle* outputs,
-                          char* kernel, RtcHandle *out);
+MXNET_DLL int MXRtcCreate(char *name, mx_uint num_input, mx_uint num_output,
+                          char **input_names, char **output_names,
+                          NDArrayHandle *inputs, NDArrayHandle *outputs,
+                          char *kernel, RtcHandle *out);
 
 /**
  * \brief Run cuda kernel
 */
 MXNET_DLL int MXRtcPush(RtcHandle handle, mx_uint num_input, mx_uint num_output,
-                        NDArrayHandle* inputs, NDArrayHandle* outputs,
-                        mx_uint gridDimX,
-                        mx_uint gridDimY,
-                        mx_uint gridDimZ,
-                        mx_uint blockDimX,
-                        mx_uint blockDimY,
+                        NDArrayHandle *inputs, NDArrayHandle *outputs,
+                        mx_uint gridDimX, mx_uint gridDimY, mx_uint gridDimZ,
+                        mx_uint blockDimX, mx_uint blockDimY,
                         mx_uint blockDimZ);
 
 /**
@@ -1561,7 +1440,8 @@ MXNET_DLL int MXRtcPush(RtcHandle handle, mx_uint num_input, mx_uint num_output,
 */
 MXNET_DLL int MXRtcFree(RtcHandle handle);
 
-MXNET_DLL int MXCustomOpRegister(const char* op_type, CustomOpPropCreator creator);
+MXNET_DLL int MXCustomOpRegister(const char *op_type,
+                                 CustomOpPropCreator creator);
 
 #ifdef __cplusplus
 }

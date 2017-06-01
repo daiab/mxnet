@@ -3,38 +3,43 @@
  * \file regression_output.cc
  * \brief regression output operator
 */
-#include "./regression_output-inl.h"
 #include "./mshadow_op.h"
+#include "./regression_output-inl.h"
 
 namespace mxnet {
 namespace op {
 
-template<>
+template <>
 Operator *CreateRegressionOutputOp<cpu>(reg_enum::RegressionOutputType type,
                                         RegressionOutputParam param) {
-  switch (type) {
-    case reg_enum::kLinear:
-      return new RegressionOutputOp<cpu, mshadow::op::identity, mshadow::op::minus>(param);
-    case reg_enum::kLogistic:
-      return new RegressionOutputOp<cpu, mshadow_op::sigmoid, mshadow::op::minus>(param);
-    case reg_enum::kMAE:
-      return new RegressionOutputOp<cpu, mshadow::op::identity, mshadow_op::minus_sign>(param);
-    default:
-      LOG(FATAL) << "unknown activation type " << type;
-  }
-  return nullptr;
+    switch (type) {
+        case reg_enum::kLinear:
+            return new RegressionOutputOp<cpu, mshadow::op::identity,
+                                          mshadow::op::minus>(param);
+        case reg_enum::kLogistic:
+            return new RegressionOutputOp<cpu, mshadow_op::sigmoid,
+                                          mshadow::op::minus>(param);
+        case reg_enum::kMAE:
+            return new RegressionOutputOp<cpu, mshadow::op::identity,
+                                          mshadow_op::minus_sign>(param);
+        default:
+            LOG(FATAL) << "unknown activation type " << type;
+    }
+    return nullptr;
 }
 
 // DO_BIND_DISPATCH comes from operator_common.h
-template<reg_enum::RegressionOutputType type>
+template <reg_enum::RegressionOutputType type>
 Operator *RegressionOutputProp<type>::CreateOperator(Context ctx) const {
-  DO_BIND_DISPATCH(CreateRegressionOutputOp, type, param_);
+    DO_BIND_DISPATCH(CreateRegressionOutputOp, type, param_);
 }
 
 DMLC_REGISTER_PARAMETER(RegressionOutputParam);
 
-MXNET_REGISTER_OP_PROPERTY(LinearRegressionOutput, RegressionOutputProp<reg_enum::kLinear>)
-.describe(R"code(Computes and optimizes for squared loss during backward propagation.
+MXNET_REGISTER_OP_PROPERTY(LinearRegressionOutput,
+                           RegressionOutputProp<reg_enum::kLinear>)
+    .describe(
+        R"code(Computes and optimizes for squared loss during backward propagation.
 Just outputs ``data`` during forward propagation.
 
 If :math:`\hat{y}_i` is the predicted value of the i-th sample, and :math:`y_i` is the corresponding target value,
@@ -49,12 +54,13 @@ By default, gradients of this loss function are scaled by factor `1/n`, where n 
 The parameter `grad_scale` can be used to change this scale to `grad_scale/n`.
 
 )code" ADD_FILELINE)
-.add_argument("data", "NDArray-or-Symbol", "Input data to the function.")
-.add_argument("label", "NDArray-or-Symbol", "Input label to the function.")
-.add_arguments(RegressionOutputParam::__FIELDS__());
+    .add_argument("data", "NDArray-or-Symbol", "Input data to the function.")
+    .add_argument("label", "NDArray-or-Symbol", "Input label to the function.")
+    .add_arguments(RegressionOutputParam::__FIELDS__());
 
-MXNET_REGISTER_OP_PROPERTY(MAERegressionOutput, RegressionOutputProp<reg_enum::kMAE>)
-.describe(R"code(Computes mean absolute error of the input.
+MXNET_REGISTER_OP_PROPERTY(MAERegressionOutput,
+                           RegressionOutputProp<reg_enum::kMAE>)
+    .describe(R"code(Computes mean absolute error of the input.
 
 MAE is a risk metric corresponding to the expected value of the absolute error.
 
@@ -70,12 +76,13 @@ By default, gradients of this loss function are scaled by factor `1/n`, where n 
 The parameter `grad_scale` can be used to change this scale to `grad_scale/n`.
 
 )code" ADD_FILELINE)
-.add_argument("data", "NDArray-or-Symbol", "Input data to the function.")
-.add_argument("label", "NDArray-or-Symbol", "Input label to the function.")
-.add_arguments(RegressionOutputParam::__FIELDS__());
+    .add_argument("data", "NDArray-or-Symbol", "Input data to the function.")
+    .add_argument("label", "NDArray-or-Symbol", "Input label to the function.")
+    .add_arguments(RegressionOutputParam::__FIELDS__());
 
-MXNET_REGISTER_OP_PROPERTY(LogisticRegressionOutput, RegressionOutputProp<reg_enum::kLogistic>)
-.describe(R"code(Applies a logistic function to the input.
+MXNET_REGISTER_OP_PROPERTY(LogisticRegressionOutput,
+                           RegressionOutputProp<reg_enum::kLogistic>)
+    .describe(R"code(Applies a logistic function to the input.
 
 The logistic function, also known as the sigmoid function, is computed as
 :math:`\frac{1}{1+exp(-x)}`.
@@ -91,9 +98,9 @@ By default, gradients of this loss function are scaled by factor `1/n`, where n 
 The parameter `grad_scale` can be used to change this scale to `grad_scale/n`.
 
 )code" ADD_FILELINE)
-.add_argument("data", "NDArray-or-Symbol", "Input data to the function.")
-.add_argument("label", "NDArray-or-Symbol", "Input label to the function.")
-.add_arguments(RegressionOutputParam::__FIELDS__());
+    .add_argument("data", "NDArray-or-Symbol", "Input data to the function.")
+    .add_argument("label", "NDArray-or-Symbol", "Input label to the function.")
+    .add_arguments(RegressionOutputParam::__FIELDS__());
 
 }  // namespace op
 }  // namespace mxnet

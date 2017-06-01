@@ -6,10 +6,6 @@
 #include <nnvm/c_api.h>
 #include "./c_api_common.h"
 
-const char *MXGetLastError() {
-  return NNGetLastError();
-}
+const char* MXGetLastError() { return NNGetLastError(); }
 
-void MXAPISetLastError(const char* msg) {
-  NNAPISetLastError(msg);
-}
+void MXAPISetLastError(const char* msg) { NNAPISetLastError(msg); }

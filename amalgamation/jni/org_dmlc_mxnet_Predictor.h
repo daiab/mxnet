@@ -12,32 +12,33 @@ extern "C" {
  * Method:    createPredictor
  * Signature: ([B[BII[Ljava/lang/String;[[I)J
  */
-JNIEXPORT jlong JNICALL Java_org_dmlc_mxnet_Predictor_createPredictor
-  (JNIEnv *, jclass, jbyteArray, jbyteArray, jint, jint, jobjectArray, jobjectArray);
+JNIEXPORT jlong JNICALL Java_org_dmlc_mxnet_Predictor_createPredictor(
+    JNIEnv *, jclass, jbyteArray, jbyteArray, jint, jint, jobjectArray,
+    jobjectArray);
 
 /*
  * Class:     org_dmlc_mxnet_Predictor
  * Method:    nativeFree
  * Signature: (J)V
  */
-JNIEXPORT void JNICALL Java_org_dmlc_mxnet_Predictor_nativeFree
-  (JNIEnv *, jclass, jlong);
+JNIEXPORT void JNICALL Java_org_dmlc_mxnet_Predictor_nativeFree(JNIEnv *,
+                                                                jclass, jlong);
 
 /*
  * Class:     org_dmlc_mxnet_Predictor
  * Method:    nativeGetOutput
  * Signature: (JI)[F
  */
-JNIEXPORT jfloatArray JNICALL Java_org_dmlc_mxnet_Predictor_nativeGetOutput
-  (JNIEnv *, jclass, jlong, jint);
+JNIEXPORT jfloatArray JNICALL
+Java_org_dmlc_mxnet_Predictor_nativeGetOutput(JNIEnv *, jclass, jlong, jint);
 
 /*
  * Class:     org_dmlc_mxnet_Predictor
  * Method:    nativeForward
  * Signature: (JLjava/lang/String;[F)V
  */
-JNIEXPORT void JNICALL Java_org_dmlc_mxnet_Predictor_nativeForward
-  (JNIEnv *, jclass, jlong, jstring, jfloatArray);
+JNIEXPORT void JNICALL Java_org_dmlc_mxnet_Predictor_nativeForward(
+    JNIEnv *, jclass, jlong, jstring, jfloatArray);
 
 #ifdef __cplusplus
 }

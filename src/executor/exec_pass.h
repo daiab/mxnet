@@ -10,8 +10,8 @@
 #include <mxnet/ndarray.h>
 #include <mxnet/operator.h>
 #include <nnvm/graph.h>
-#include <vector>
 #include <memory>
+#include <vector>
 
 namespace mxnet {
 namespace exec {
@@ -25,31 +25,31 @@ using nnvm::Graph;
  * that unifies all the operator
  */
 class OpExecutor {
- public:
-  /*! \brief input arrays */
-  std::vector<NDArray> in_array;
-  /*! \brief output data arrays */
-  std::vector<NDArray> out_array;
-  /*! \brief output requirement on each array */
-  std::vector<OpReqType> req;
-  /*! \brief runtime op context, contains allocated resources */
-  OpContext op_ctx;
-  /*! \brief virtual destructor */
-  virtual ~OpExecutor() {}
-  /*!
-   * \brief Setup the executor for given NDArray member
-   * this can be called multiple times if NDArray changed during reshape.
-   *  It is safe to call it via asynchronize engine lambda
-   */
-  virtual void Setup() = 0;
-  /*!
-   * \brief run the operator given runtime context on device.
-   *  This function call do not synchronize the stream.
-   * \param rctx The runtime context passed in by environment.
-   */
-  virtual void Run(RunContext rctx) = 0;
-  /*! \return the execution type */
-  virtual Operator::ExecType exec_type() const = 0;
+   public:
+    /*! \brief input arrays */
+    std::vector<NDArray> in_array;
+    /*! \brief output data arrays */
+    std::vector<NDArray> out_array;
+    /*! \brief output requirement on each array */
+    std::vector<OpReqType> req;
+    /*! \brief runtime op context, contains allocated resources */
+    OpContext op_ctx;
+    /*! \brief virtual destructor */
+    virtual ~OpExecutor() {}
+    /*!
+     * \brief Setup the executor for given NDArray member
+     * this can be called multiple times if NDArray changed during reshape.
+     *  It is safe to call it via asynchronize engine lambda
+     */
+    virtual void Setup() = 0;
+    /*!
+     * \brief run the operator given runtime context on device.
+     *  This function call do not synchronize the stream.
+     * \param rctx The runtime context passed in by environment.
+     */
+    virtual void Run(RunContext rctx) = 0;
+    /*! \return the execution type */
+    virtual Operator::ExecType exec_type() const = 0;
 };
 
 /*!
@@ -96,8 +96,10 @@ Graph AttachOpResources(Graph g);
  *
  * \return graph two new attributes, changes attribute "storage_id".
  *  - "addto_entry", std::vector<bool> size=g.num_node_entries()
- *    - addto_entry[eid] == 1, the corresponding op need to be performed using req=kAddTo
- *  - "skip_plus_node", std::vector<int> if set to 1, current op's execution is skiped.
+ *    - addto_entry[eid] == 1, the corresponding op need to be performed using
+ * req=kAddTo
+ *  - "skip_plus_node", std::vector<int> if set to 1, current op's execution is
+ * skiped.
  */
 Graph DetectInplaceAddTo(Graph g);
 

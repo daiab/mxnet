@@ -14,20 +14,20 @@ namespace mxnet {
 namespace R {
 /*! \brief exporter class*/
 class Exporter {
- public:
-  /*!
-   * \brief Export the generated file into path.
-   * \param path The path to be exported.
-   */
-  static void Export(const std::string& path);
-  // intialize the Rcpp module
-  static void InitRcppModule();
+   public:
+    /*!
+     * \brief Export the generated file into path.
+     * \param path The path to be exported.
+     */
+    static void Export(const std::string& path);
+    // intialize the Rcpp module
+    static void InitRcppModule();
 
- public:
-  // get the singleton of exporter
-  static Exporter* Get();
-  /*! \brief The scope of current module to export */
-  Rcpp::Module* scope_;
+   public:
+    // get the singleton of exporter
+    static Exporter* Get();
+    /*! \brief The scope of current module to export */
+    Rcpp::Module* scope_;
 };
 
 /*!
@@ -39,10 +39,9 @@ class Exporter {
  * \param arg_descriptions descriptions of arguments.
  * \param remove_dup Whether to remove duplications
  */
-std::string MakeDocString(mx_uint num_args,
-                          const char **arg_names,
-                          const char **arg_type_infos,
-                          const char **arg_descriptions,
+std::string MakeDocString(mx_uint num_args, const char** arg_names,
+                          const char** arg_type_infos,
+                          const char** arg_descriptions,
                           bool remove_dup = true);
 }  // namespace R
 }  // namespace mxnet

@@ -5,19 +5,20 @@
  * \author Bing Xu
 */
 
-#include "batch_norm_v1-inl.h"
 #include <nnvm/op_attr_types.h>
+#include "batch_norm_v1-inl.h"
 
 namespace mxnet {
 namespace op {
-template<>
+template <>
 Operator *CreateOp<cpu>(BatchNormV1Param param, int dtype) {
-  return new BatchNormV1Op<cpu>(param);
+    return new BatchNormV1Op<cpu>(param);
 }
 
 // DO_BIND_DISPATCH comes from operator_common.h
-Operator *BatchNormV1Prop::CreateOperatorEx(Context ctx, std::vector<TShape> *in_shape,
-    std::vector<int> *in_type) const {
+Operator *BatchNormV1Prop::CreateOperatorEx(Context ctx,
+                                            std::vector<TShape> *in_shape,
+                                            std::vector<int> *in_type) const {
     std::vector<TShape> out_shape, aux_shape;
     std::vector<int> out_type, aux_type;
     CHECK(InferType(in_type, &out_type, &aux_type));
@@ -28,7 +29,7 @@ Operator *BatchNormV1Prop::CreateOperatorEx(Context ctx, std::vector<TShape> *in
 DMLC_REGISTER_PARAMETER(BatchNormV1Param);
 
 MXNET_REGISTER_OP_PROPERTY(BatchNorm_v1, BatchNormV1Prop)
-.describe(R"code(Batch normalization.
+    .describe(R"code(Batch normalization.
 
 Normalizes a data batch by mean and variance, and applies a scale ``gamma`` as
 well as offset ``beta``.
@@ -69,21 +70,24 @@ Both ``gamma`` and ``beta`` are learnable parameters. But if ``fix_gamma`` is tr
 then set ``gamma`` to 1 and its gradient to 0.
 
 )code" ADD_FILELINE)
-.add_argument("data", "NDArray-or-Symbol", "Input data to batch normalization")
-.add_argument("gamma", "NDArray-or-Symbol", "gamma array")
-.add_argument("beta", "NDArray-or-Symbol", "beta array")
-.add_arguments(BatchNormV1Param::__FIELDS__());
+    .add_argument("data", "NDArray-or-Symbol",
+                  "Input data to batch normalization")
+    .add_argument("gamma", "NDArray-or-Symbol", "gamma array")
+    .add_argument("beta", "NDArray-or-Symbol", "beta array")
+    .add_arguments(BatchNormV1Param::__FIELDS__());
 
 NNVM_REGISTER_OP(BatchNorm_v1)
-.set_attr<nnvm::FSetInputVarAttrOnCompose>("FSetInputVarAttrOnCompose",
-    [](const nnvm::NodeAttrs& attrs, nnvm::NodePtr var, const int index) {
-      if (var->attrs.dict.find("__init__") != var->attrs.dict.end()) return;
-      if (index == 3) {
-        var->attrs.dict["__init__"] = "[\"zero\", {}]";
-      } else if (index == 4) {
-        var->attrs.dict["__init__"] = "[\"one\", {}]";
-      }
-    });
+    .set_attr<nnvm::FSetInputVarAttrOnCompose>(
+        "FSetInputVarAttrOnCompose",
+        [](const nnvm::NodeAttrs &attrs, nnvm::NodePtr var, const int index) {
+            if (var->attrs.dict.find("__init__") != var->attrs.dict.end())
+                return;
+            if (index == 3) {
+                var->attrs.dict["__init__"] = "[\"zero\", {}]";
+            } else if (index == 4) {
+                var->attrs.dict["__init__"] = "[\"one\", {}]";
+            }
+        });
 
 }  // namespace op
 }  // namespace mxnet

@@ -20,8 +20,6 @@
 *
 *******************************************************************************/
 
-
-
 #include "mkl_cppwrapper.h"
 #include <stdio.h>
 #if MXNET_USE_MKL2017 == 1
@@ -38,7 +36,5 @@ int getMKLBuildDate() {
     return build;
 }
 
-bool enableMKLWarnGenerated() {
-  return false;
-}
+bool enableMKLWarnGenerated() { return false; }
 #endif  // MSHADOW_USE_MKL2017

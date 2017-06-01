@@ -13,7 +13,8 @@ DMLC_REGISTER_PARAMETER(TakeParam);
 DMLC_REGISTER_PARAMETER(OneHotParam);
 
 NNVM_REGISTER_OP(Embedding)
-.describe(R"code(Maps integer indices to vector representations (embeddings).
+    .describe(
+        R"code(Maps integer indices to vector representations (embeddings).
 
 This operator maps words to real-valued vectors in a high-dimensional space,
 called word embeddings. These embeddings can capture semantic and syntactic properties of the words.
@@ -53,42 +54,47 @@ Examples::
                             [ 10.,  11.,  12.,  13.,  14.]]]
 
 )code" ADD_FILELINE)
-.set_num_inputs(2)
-.set_num_outputs(1)
-.set_attr_parser(ParamParser<EmbeddingParam>)
-.set_attr<nnvm::FListInputNames>("FListInputNames",
-  [](const NodeAttrs& attrs) {
-    return std::vector<std::string>{"data", "weight"};
-  })
-.set_attr<nnvm::FInferShape>("FInferShape", EmbeddingOpShape)
-.set_attr<nnvm::FInferType>("FInferType", EmbeddingOpType)
-.set_attr<FResourceRequest>("FResourceRequest",
-  [](const NodeAttrs& attrs) {
-    return std::vector<ResourceRequest>{ResourceRequest::kTempSpace};
-  })
-.set_attr<FCompute>("FCompute<cpu>", EmbeddingOpForward<cpu>)
-.set_attr<nnvm::FGradient>("FGradient",
-  [](const nnvm::NodePtr& n, const std::vector<nnvm::NodeEntry>& ograds) {
-    return MakeNonlossGradNode("_backward_Embedding", n, ograds,
-                               {n->inputs[0]}, n->attrs.dict);
-  })
-.add_argument("data", "NDArray-or-Symbol", "The input array to the embedding operator.")
-.add_argument("weight", "NDArray-or-Symbol", "The embedding weight matrix.")
-.add_arguments(EmbeddingParam::__FIELDS__());
+    .set_num_inputs(2)
+    .set_num_outputs(1)
+    .set_attr_parser(ParamParser<EmbeddingParam>)
+    .set_attr<nnvm::FListInputNames>(
+        "FListInputNames",
+        [](const NodeAttrs& attrs) {
+            return std::vector<std::string>{"data", "weight"};
+        })
+    .set_attr<nnvm::FInferShape>("FInferShape", EmbeddingOpShape)
+    .set_attr<nnvm::FInferType>("FInferType", EmbeddingOpType)
+    .set_attr<FResourceRequest>("FResourceRequest",
+                                [](const NodeAttrs& attrs) {
+                                    return std::vector<ResourceRequest>{
+                                        ResourceRequest::kTempSpace};
+                                })
+    .set_attr<FCompute>("FCompute<cpu>", EmbeddingOpForward<cpu>)
+    .set_attr<nnvm::FGradient>("FGradient",
+                               [](const nnvm::NodePtr& n,
+                                  const std::vector<nnvm::NodeEntry>& ograds) {
+                                   return MakeNonlossGradNode(
+                                       "_backward_Embedding", n, ograds,
+                                       {n->inputs[0]}, n->attrs.dict);
+                               })
+    .add_argument("data", "NDArray-or-Symbol",
+                  "The input array to the embedding operator.")
+    .add_argument("weight", "NDArray-or-Symbol", "The embedding weight matrix.")
+    .add_arguments(EmbeddingParam::__FIELDS__());
 
 NNVM_REGISTER_OP(_backward_Embedding)
-.set_num_inputs(2)
-.set_num_outputs(2)
-.set_attr<FResourceRequest>("FResourceRequest",
-  [](const NodeAttrs& attrs) {
-    return std::vector<ResourceRequest>{ResourceRequest::kTempSpace};
-  })
-.set_attr<nnvm::TIsBackward>("TIsBackward", true)
-.set_attr<FCompute>("FCompute<cpu>", EmbeddingOpBackward<cpu>);
-
+    .set_num_inputs(2)
+    .set_num_outputs(2)
+    .set_attr<FResourceRequest>("FResourceRequest",
+                                [](const NodeAttrs& attrs) {
+                                    return std::vector<ResourceRequest>{
+                                        ResourceRequest::kTempSpace};
+                                })
+    .set_attr<nnvm::TIsBackward>("TIsBackward", true)
+    .set_attr<FCompute>("FCompute<cpu>", EmbeddingOpBackward<cpu>);
 
 NNVM_REGISTER_OP(take)
-.describe(R"code(Takes elements from an input array along the given axis.
+    .describe(R"code(Takes elements from an input array along the given axis.
 
 This function slices the input array along a particular axis with the provided indices.
 
@@ -115,42 +121,47 @@ Examples::
                              [ 5.,  6.]]]
 
 )code" ADD_FILELINE)
-.set_num_inputs(2)
-.set_num_outputs(1)
-.set_attr_parser(TakeParamParser<TakeParam>)
-.set_attr<nnvm::FListInputNames>("FListInputNames",
-  [](const NodeAttrs& attrs) {
-    return std::vector<std::string>{"a", "indices"};
-  })
-.set_attr<nnvm::FInferShape>("FInferShape", TakeOpShape)
-.set_attr<nnvm::FInferType>("FInferType", TakeOpType)
-.set_attr<FResourceRequest>("FResourceRequest",
-  [](const NodeAttrs& attrs) {
-    return std::vector<ResourceRequest>{ResourceRequest::kTempSpace};
-  })
-.set_attr<FCompute>("FCompute<cpu>", TakeOpForward<cpu>)
-.set_attr<nnvm::FGradient>("FGradient",
-  [](const nnvm::NodePtr& n,  const std::vector<nnvm::NodeEntry>& ograds) {
-    return MakeNonlossGradNode("_backward_take", n, ograds,
-                               {n->inputs[1]}, n->attrs.dict);
-  })
-.add_argument("a", "NDArray-or-Symbol", "The input array.")
-.add_argument("indices", "NDArray-or-Symbol", "The indices of the values to be extracted.")
-.add_arguments(TakeParam::__FIELDS__());
+    .set_num_inputs(2)
+    .set_num_outputs(1)
+    .set_attr_parser(TakeParamParser<TakeParam>)
+    .set_attr<nnvm::FListInputNames>(
+        "FListInputNames",
+        [](const NodeAttrs& attrs) {
+            return std::vector<std::string>{"a", "indices"};
+        })
+    .set_attr<nnvm::FInferShape>("FInferShape", TakeOpShape)
+    .set_attr<nnvm::FInferType>("FInferType", TakeOpType)
+    .set_attr<FResourceRequest>("FResourceRequest",
+                                [](const NodeAttrs& attrs) {
+                                    return std::vector<ResourceRequest>{
+                                        ResourceRequest::kTempSpace};
+                                })
+    .set_attr<FCompute>("FCompute<cpu>", TakeOpForward<cpu>)
+    .set_attr<nnvm::FGradient>("FGradient",
+                               [](const nnvm::NodePtr& n,
+                                  const std::vector<nnvm::NodeEntry>& ograds) {
+                                   return MakeNonlossGradNode(
+                                       "_backward_take", n, ograds,
+                                       {n->inputs[1]}, n->attrs.dict);
+                               })
+    .add_argument("a", "NDArray-or-Symbol", "The input array.")
+    .add_argument("indices", "NDArray-or-Symbol",
+                  "The indices of the values to be extracted.")
+    .add_arguments(TakeParam::__FIELDS__());
 
 NNVM_REGISTER_OP(_backward_take)
-.set_num_inputs(2)
-.set_num_outputs(2)
-.set_attr<FResourceRequest>("FResourceRequest",
-  [](const NodeAttrs& attrs) {
-    return std::vector<ResourceRequest>{ResourceRequest::kTempSpace};
-  })
-.set_attr<nnvm::TIsBackward>("TIsBackward", true)
-.set_attr<FCompute>("FCompute<cpu>", TakeOpBackward<cpu>);
-
+    .set_num_inputs(2)
+    .set_num_outputs(2)
+    .set_attr<FResourceRequest>("FResourceRequest",
+                                [](const NodeAttrs& attrs) {
+                                    return std::vector<ResourceRequest>{
+                                        ResourceRequest::kTempSpace};
+                                })
+    .set_attr<nnvm::TIsBackward>("TIsBackward", true)
+    .set_attr<FCompute>("FCompute<cpu>", TakeOpBackward<cpu>);
 
 NNVM_REGISTER_OP(batch_take)
-.describe(R"code(Takes elements from a data batch.
+    .describe(R"code(Takes elements from a data batch.
 
 .. note::
   `batch_take` is deprecated. Use `pick` instead.
@@ -170,20 +181,21 @@ Examples::
   batch_take(x, [0,1,0]) = [ 1.  4.  5.]
 
 )code" ADD_FILELINE)
-.set_num_outputs(1)
-.set_num_inputs(2)
-.set_attr<nnvm::FListInputNames>("FListInputNames",
-  [](const NodeAttrs& attrs) {
-    return std::vector<std::string>{"a", "indices"};
-  })
-.set_attr<nnvm::FInferShape>("FInferShape", BatchTakeOpShape)
-.set_attr<nnvm::FInferType>("FInferType", BatchTakeOpType)
-.set_attr<FCompute>("FCompute<cpu>", BatchTakeOpForward<cpu>)
-.add_argument("a", "NDArray-or-Symbol", "The input array")
-.add_argument("indices", "NDArray-or-Symbol", "The index array");
+    .set_num_outputs(1)
+    .set_num_inputs(2)
+    .set_attr<nnvm::FListInputNames>(
+        "FListInputNames",
+        [](const NodeAttrs& attrs) {
+            return std::vector<std::string>{"a", "indices"};
+        })
+    .set_attr<nnvm::FInferShape>("FInferShape", BatchTakeOpShape)
+    .set_attr<nnvm::FInferType>("FInferType", BatchTakeOpType)
+    .set_attr<FCompute>("FCompute<cpu>", BatchTakeOpForward<cpu>)
+    .add_argument("a", "NDArray-or-Symbol", "The input array")
+    .add_argument("indices", "NDArray-or-Symbol", "The index array");
 
 NNVM_REGISTER_OP(one_hot)
-.describe(R"code(Returns a one-hot array.
+    .describe(R"code(Returns a one-hot array.
 
 The locations represented by `indices` take value `on_value`, while all
 other locations take value `off_value`.
@@ -216,19 +228,21 @@ Examples::
                                      [[ 0.  0.  1.]
                                       [ 1.  0.  0.]]]
 )code" ADD_FILELINE)
-.set_num_outputs(1)
-.set_num_inputs(1)
-.set_attr_parser(ParamParser<OneHotParam>)
-.set_attr<nnvm::FListInputNames>("FListInputNames",
-  [](const NodeAttrs& attrs) {
-    return std::vector<std::string>{"indices"};
-  })
-.set_attr<nnvm::FInferShape>("FInferShape", OneHotOpShape)
-.set_attr<nnvm::FInferType>("FInferType", OneHotOpType)
-.set_attr<FCompute>("FCompute<cpu>", OneHotOpForward<cpu>)
-.set_attr<nnvm::FGradient>("FGradient", MakeZeroGradNodes)
-.add_argument("indices", "NDArray-or-Symbol", "array of locations where to set on_value")
-.add_arguments(OneHotParam::__FIELDS__());
+    .set_num_outputs(1)
+    .set_num_inputs(1)
+    .set_attr_parser(ParamParser<OneHotParam>)
+    .set_attr<nnvm::FListInputNames>("FListInputNames",
+                                     [](const NodeAttrs& attrs) {
+                                         return std::vector<std::string>{
+                                             "indices"};
+                                     })
+    .set_attr<nnvm::FInferShape>("FInferShape", OneHotOpShape)
+    .set_attr<nnvm::FInferType>("FInferType", OneHotOpType)
+    .set_attr<FCompute>("FCompute<cpu>", OneHotOpForward<cpu>)
+    .set_attr<nnvm::FGradient>("FGradient", MakeZeroGradNodes)
+    .add_argument("indices", "NDArray-or-Symbol",
+                  "array of locations where to set on_value")
+    .add_arguments(OneHotParam::__FIELDS__());
 
 }  // namespace op
 }  // namespace mxnet

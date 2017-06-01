@@ -7,13 +7,13 @@
 #define MXNET_COMMON_UTILS_H_
 
 #if DMLC_USE_CXX11
+#include <algorithm>
 #include <memory>
-#include <vector>
-#include <type_traits>
-#include <utility>
 #include <random>
 #include <thread>
-#include <algorithm>
+#include <type_traits>
+#include <utility>
+#include <vector>
 #endif  // DMLC_USE_CXX11
 
 #include <dmlc/logging.h>
@@ -25,16 +25,16 @@ namespace common {
 #if DMLC_USE_CXX11
 // heuristic to dermine number of threads per GPU
 inline int GetNumThreadPerGPU() {
-  // This is resource efficient option.
-  return dmlc::GetEnv("MXNET_GPU_WORKER_NTHREADS", 2);
+    // This is resource efficient option.
+    return dmlc::GetEnv("MXNET_GPU_WORKER_NTHREADS", 2);
 }
 
 // heuristic to get number of matching colors.
 // this decides how much parallelism we can get in each GPU.
 inline int GetExecNumMatchColor() {
-  // This is resource efficient option.
-  int num_match_color = dmlc::GetEnv("MXNET_EXEC_NUM_TEMP", 1);
-  return std::min(num_match_color, GetNumThreadPerGPU());
+    // This is resource efficient option.
+    int num_match_color = dmlc::GetEnv("MXNET_EXEC_NUM_TEMP", 1);
+    return std::min(num_match_color, GetNumThreadPerGPU());
 }
 
 /*!
@@ -52,10 +52,10 @@ namespace helper {
  */
 template <class T>
 struct UniqueIf {
-  /*!
-   * \brief Type of `T`.
-   */
-  using SingleObject = std::unique_ptr<T>;
+    /*!
+     * \brief Type of `T`.
+     */
+    using SingleObject = std::unique_ptr<T>;
 };
 
 /*!
@@ -63,10 +63,10 @@ struct UniqueIf {
  */
 template <class T>
 struct UniqueIf<T[]> {
-  /*!
-   * \brief Type of `T`.
-   */
-  using UnknownBound = std::unique_ptr<T[]>;
+    /*!
+     * \brief Type of `T`.
+     */
+    using UnknownBound = std::unique_ptr<T[]>;
 };
 
 /*!
@@ -74,10 +74,10 @@ struct UniqueIf<T[]> {
  */
 template <class T, size_t kSize>
 struct UniqueIf<T[kSize]> {
-  /*!
-   * \brief Type of `T`.
-   */
-  using KnownBound = void;
+    /*!
+     * \brief Type of `T`.
+     */
+    using KnownBound = void;
 };
 
 }  // namespace helper
@@ -95,7 +95,7 @@ struct UniqueIf<T[kSize]> {
  */
 template <class T, class... Args>
 typename helper::UniqueIf<T>::SingleObject MakeUnique(Args&&... args) {
-  return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
+    return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
 }
 
 /*!
@@ -109,8 +109,8 @@ typename helper::UniqueIf<T>::SingleObject MakeUnique(Args&&... args) {
  */
 template <class T>
 typename helper::UniqueIf<T>::UnknownBound MakeUnique(size_t n) {
-  using U = typename std::remove_extent<T>::type;
-  return std::unique_ptr<T>(new U[n]{});
+    using U = typename std::remove_extent<T>::type;
+    return std::unique_ptr<T>(new U[n]{});
 }
 
 /*!

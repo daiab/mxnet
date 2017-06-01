@@ -9,14 +9,14 @@
 namespace mxnet {
 namespace op {
 
-template<>
+template <>
 Operator *CreateOp<cpu>(IFFTParam param, int dtype) {
     LOG(FATAL) << "ifft is only available for GPU.";
     return NULL;
 }
 
 Operator *IFFTProp::CreateOperatorEx(Context ctx, std::vector<TShape> *in_shape,
-                                                    std::vector<int> *in_type) const {
+                                     std::vector<int> *in_type) const {
     std::vector<TShape> out_shape, aux_shape;
     std::vector<int> out_type, aux_type;
     CHECK(InferType(in_type, &out_type, &aux_type));
@@ -27,7 +27,7 @@ Operator *IFFTProp::CreateOperatorEx(Context ctx, std::vector<TShape> *in_shape,
 DMLC_REGISTER_PARAMETER(IFFTParam);
 
 MXNET_REGISTER_OP_PROPERTY(_contrib_ifft, IFFTProp)
-.describe(R"code(Apply 1D ifft to input"
+    .describe(R"code(Apply 1D ifft to input"
 
 .. note:: `ifft` is only available on GPU.
 
@@ -40,7 +40,7 @@ Example::
    out = mx.contrib.ndarray.ifft(data = mx.nd.array(data,ctx = mx.gpu(0)))
 
 )code" ADD_FILELINE)
-.add_argument("data", "NDArray-or-Symbol", "Input data to the IFFTOp.")
-.add_arguments(IFFTParam::__FIELDS__());
+    .add_argument("data", "NDArray-or-Symbol", "Input data to the IFFTOp.")
+    .add_arguments(IFFTParam::__FIELDS__());
 }  // namespace op
 }  // namespace mxnet

@@ -27,9 +27,9 @@ typedef unsigned int mx_uint;
 /*! \brief manually define float */
 typedef float mx_float;
 /*! \brief handle to Predictor */
-typedef void *PredictorHandle;
+typedef void* PredictorHandle;
 /*! \brief handle to NDArray list */
-typedef void *NDListHandle;
+typedef void* NDListHandle;
 
 /*!
  * \brief Get the last error happeneed.
@@ -52,16 +52,14 @@ MXNET_DLL const char* MXGetLastError();
  *    The length of this array = num_input_nodes + 1.
  *    For feedforward net that takes 4 dimensional input, this is {0, 4}.
  * \param input_shape_data A flatted data of shapes of each input node.
- *    For feedforward net that takes 4 dimensional input, this is the shape data.
+ *    For feedforward net that takes 4 dimensional input, this is the shape
+ * data.
  * \param out The created predictor handle.
  * \return 0 when success, -1 when failure.
  */
-MXNET_DLL int MXPredCreate(const char* symbol_json_str,
-                           const void* param_bytes,
-                           int param_size,
-                           int dev_type, int dev_id,
-                           mx_uint num_input_nodes,
-                           const char** input_keys,
+MXNET_DLL int MXPredCreate(const char* symbol_json_str, const void* param_bytes,
+                           int param_size, int dev_type, int dev_id,
+                           mx_uint num_input_nodes, const char** input_keys,
                            const mx_uint* input_shape_indptr,
                            const mx_uint* input_shape_data,
                            PredictorHandle* out);
@@ -81,7 +79,8 @@ MXNET_DLL int MXPredCreate(const char* symbol_json_str,
  *    The length of this array = num_input_nodes + 1.
  *    For feedforward net that takes 4 dimensional input, this is {0, 4}.
  * \param input_shape_data A flatted data of shapes of each input node.
- *    For feedforward net that takes 4 dimensional input, this is the shape data.
+ *    For feedforward net that takes 4 dimensional input, this is the shape
+ * data.
  * \param num_output_nodes Number of output nodes to the net,
  * \param output_keys The name of output argument.
  *    For example {"global_pool"}
@@ -89,43 +88,35 @@ MXNET_DLL int MXPredCreate(const char* symbol_json_str,
  * \return 0 when success, -1 when failure.
  */
 
-MXNET_DLL int MXPredCreatePartialOut(const char* symbol_json_str,
-                                     const void* param_bytes,
-                                     int param_size,
-                                     int dev_type, int dev_id,
-                                     mx_uint num_input_nodes,
-                                     const char** input_keys,
-                                     const mx_uint* input_shape_indptr,
-                                     const mx_uint* input_shape_data,
-                                     mx_uint num_output_nodes,
-                                     const char** output_keys,
-                                     PredictorHandle* out);
+MXNET_DLL int MXPredCreatePartialOut(
+    const char* symbol_json_str, const void* param_bytes, int param_size,
+    int dev_type, int dev_id, mx_uint num_input_nodes, const char** input_keys,
+    const mx_uint* input_shape_indptr, const mx_uint* input_shape_data,
+    mx_uint num_output_nodes, const char** output_keys, PredictorHandle* out);
 /*!
  * \brief Get the shape of output node.
- *  The returned shape_data and shape_ndim is only valid before next call to MXPred function.
+ *  The returned shape_data and shape_ndim is only valid before next call to
+ * MXPred function.
  * \param handle The handle of the predictor.
  * \param index The index of output node, set to 0 if there is only one output.
  * \param shape_data Used to hold pointer to the shape data
  * \param shape_ndim Used to hold shape dimension.
  * \return 0 when success, -1 when failure.
  */
-MXNET_DLL int MXPredGetOutputShape(PredictorHandle handle,
-                                   mx_uint index,
-                                   mx_uint** shape_data,
-                                   mx_uint* shape_ndim);
+MXNET_DLL int MXPredGetOutputShape(PredictorHandle handle, mx_uint index,
+                                   mx_uint** shape_data, mx_uint* shape_ndim);
 /*!
  * \brief Set the input data of predictor.
  * \param handle The predictor handle.
  * \param key The name of input node to set.
  *     For feedforward net, this is "data".
- * \param data The pointer to the data to be set, with the shape specified in MXPredCreate.
+ * \param data The pointer to the data to be set, with the shape specified in
+ * MXPredCreate.
  * \param size The size of data array, used for safety check.
  * \return 0 when success, -1 when failure.
  */
-MXNET_DLL int MXPredSetInput(PredictorHandle handle,
-                             const char* key,
-                             const mx_float* data,
-                             mx_uint size);
+MXNET_DLL int MXPredSetInput(PredictorHandle handle, const char* key,
+                             const mx_float* data, mx_uint size);
 /*!
  * \brief Run a forward pass to get the output.
  * \param handle The handle of the predictor.
@@ -135,7 +126,8 @@ MXNET_DLL int MXPredForward(PredictorHandle handle);
 /*!
  * \brief Run a interactive forward pass to get the output.
  *  This is helpful for displaying progress of prediction which can be slow.
- *  User must call PartialForward from step=0, keep increasing it until step_left=0.
+ *  User must call PartialForward from step=0, keep increasing it until
+ * step_left=0.
  * \code
  * int step_left = 1;
  * for (int step = 0; step_left != 0; ++step) {
@@ -148,7 +140,8 @@ MXNET_DLL int MXPredForward(PredictorHandle handle);
  * \param step_left The number of steps left
  * \return 0 when success, -1 when failure.
  */
-MXNET_DLL int MXPredPartialForward(PredictorHandle handle, int step, int* step_left);
+MXNET_DLL int MXPredPartialForward(PredictorHandle handle, int step,
+                                   int* step_left);
 /*!
  * \brief Get the output value of prediction.
  * \param handle The handle of the predictor.
@@ -157,10 +150,8 @@ MXNET_DLL int MXPredPartialForward(PredictorHandle handle, int step, int* step_l
  * \param size The size of data array, used for safe checking.
  * \return 0 when success, -1 when failure.
  */
-MXNET_DLL int MXPredGetOutput(PredictorHandle handle,
-                              mx_uint index,
-                              mx_float* data,
-                              mx_uint size);
+MXNET_DLL int MXPredGetOutput(PredictorHandle handle, mx_uint index,
+                              mx_float* data, mx_uint size);
 /*!
  * \brief Free a predictor handle.
  * \param handle The handle of the predictor.
@@ -176,10 +167,8 @@ MXNET_DLL int MXPredFree(PredictorHandle handle);
  * \param out_length Length of the list.
  * \return 0 when success, -1 when failure.
  */
-MXNET_DLL int MXNDListCreate(const char* nd_file_bytes,
-                             int nd_file_size,
-                             NDListHandle *out,
-                             mx_uint* out_length);
+MXNET_DLL int MXNDListCreate(const char* nd_file_bytes, int nd_file_size,
+                             NDListHandle* out, mx_uint* out_length);
 /*!
  * \brief Get an element from list
  * \param handle The handle to the NDArray
@@ -190,12 +179,9 @@ MXNET_DLL int MXNDListCreate(const char* nd_file_bytes,
  * \param out_ndim The number of dimension in the shape.
  * \return 0 when success, -1 when failure.
  */
-MXNET_DLL int MXNDListGet(NDListHandle handle,
-                          mx_uint index,
-                          const char** out_key,
-                          const mx_float** out_data,
-                          const mx_uint** out_shape,
-                          mx_uint* out_ndim);
+MXNET_DLL int MXNDListGet(NDListHandle handle, mx_uint index,
+                          const char** out_key, const mx_float** out_data,
+                          const mx_uint** out_shape, mx_uint* out_ndim);
 /*!
  * \brief Free a MXAPINDList
  * \param handle The handle of the MXAPINDList.

@@ -6,8 +6,8 @@
 #ifndef MXNET_STORAGE_NAIVE_STORAGE_MANAGER_H_
 #define MXNET_STORAGE_NAIVE_STORAGE_MANAGER_H_
 
-#include "storage_manager.h"
 #include "mxnet/base.h"
+#include "storage_manager.h"
 
 namespace mxnet {
 namespace storage {
@@ -17,34 +17,34 @@ namespace storage {
  */
 template <class DeviceStorage>
 class NaiveStorageManager final : public StorageManager {
- public:
-  /*!
-   * \brief Default constructor.
-   */
-  NaiveStorageManager() = default;
-  /*!
-   * \brief Default destructor.
-   */
-  ~NaiveStorageManager() = default;
-  void* Alloc(size_t size) override;
-  void Free(void* ptr, size_t) override;
+   public:
+    /*!
+     * \brief Default constructor.
+     */
+    NaiveStorageManager() = default;
+    /*!
+     * \brief Default destructor.
+     */
+    ~NaiveStorageManager() = default;
+    void* Alloc(size_t size) override;
+    void Free(void* ptr, size_t) override;
 
-  void DirectFree(void* ptr, size_t size) override {
-    DeviceStorage::Free(ptr);
-  }
+    void DirectFree(void* ptr, size_t size) override {
+        DeviceStorage::Free(ptr);
+    }
 
- private:
-  DISALLOW_COPY_AND_ASSIGN(NaiveStorageManager);
+   private:
+    DISALLOW_COPY_AND_ASSIGN(NaiveStorageManager);
 };  // class NaiveStorageManager
 
 template <class DeviceStorage>
 void* NaiveStorageManager<DeviceStorage>::Alloc(size_t size) {
-  return DeviceStorage::Alloc(size);
+    return DeviceStorage::Alloc(size);
 }
 
 template <class DeviceStorage>
 void NaiveStorageManager<DeviceStorage>::Free(void* ptr, size_t) {
-  DeviceStorage::Free(ptr);
+    DeviceStorage::Free(ptr);
 }
 
 }  // namespace storage

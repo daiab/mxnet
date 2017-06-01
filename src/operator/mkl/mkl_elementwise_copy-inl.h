@@ -28,41 +28,38 @@
 #include <cstring>
 #include <map>
 #include <string>
-#include <vector>
 #include <utility>
-#include "../operator_common.h"
+#include <vector>
 #include "../mshadow_op.h"
+#include "../operator_common.h"
 #include "./mkl_util-inl.h"
-
 
 namespace mxnet {
 namespace op {
 
-template<typename xpu, typename DType>
-void MKLIdentityCompute(const nnvm::NodeAttrs& attrs,
-  const OpContext& ctx,
-  const std::vector<TBlob>& inputs,
-  const std::vector<OpReqType>& req,
-  const std::vector<TBlob>& outputs) {
-  if (!req[0]) return;
+template <typename xpu, typename DType>
+void MKLIdentityCompute(const nnvm::NodeAttrs& attrs, const OpContext& ctx,
+                        const std::vector<TBlob>& inputs,
+                        const std::vector<OpReqType>& req,
+                        const std::vector<TBlob>& outputs) {
+    if (!req[0]) return;
 #if MKL_EXPERIMENTAL == 1
-  if (op::mkl_prv_data<DType>(inputs[0])) {
-    std::shared_ptr<MKLMemHolder> in_data_mem = inputs[0].Mkl_mem_;
-    // User copy to avoid potential problem
-    std::shared_ptr<MKLData<DType> > top_data = MKLData<DType>::create();
-    std::shared_ptr<MKLMemHolder> top_mem = outputs[0].Mkl_mem_;
-    top_data->copy_from(in_data_mem);
-    top_mem->set_prv_descriptor(top_data);
-    return;
-  }
+    if (op::mkl_prv_data<DType>(inputs[0])) {
+        std::shared_ptr<MKLMemHolder> in_data_mem = inputs[0].Mkl_mem_;
+        // User copy to avoid potential problem
+        std::shared_ptr<MKLData<DType> > top_data = MKLData<DType>::create();
+        std::shared_ptr<MKLMemHolder> top_mem = outputs[0].Mkl_mem_;
+        top_data->copy_from(in_data_mem);
+        top_mem->set_prv_descriptor(top_data);
+        return;
+    }
 #endif
-  int in_blob_size = inputs[0].Size();
-  int out_blob_size = outputs[0].Size();
-  CHECK_EQ(in_blob_size, out_blob_size) << "MKLIdentityCompute CPU Size not Match ";
-  memcpy(outputs[0].dptr_, inputs[0].dptr_, in_blob_size * sizeof(DType));
+    int in_blob_size = inputs[0].Size();
+    int out_blob_size = outputs[0].Size();
+    CHECK_EQ(in_blob_size, out_blob_size)
+        << "MKLIdentityCompute CPU Size not Match ";
+    memcpy(outputs[0].dptr_, inputs[0].dptr_, in_blob_size * sizeof(DType));
 }
-
-
 
 }  // namespace op
 }  // namespace mxnet
